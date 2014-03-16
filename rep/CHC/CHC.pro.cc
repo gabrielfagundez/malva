@@ -1095,7 +1095,7 @@ skeleton CHC
 		if ((direction==maximize && (remplace)) || ((direction==minimize) && (!(remplace))))
 		{
 			// fitness assigned if the fitness value is 0 in this case
-		 	double value_if_zero=MAXDOUBLE;
+		 	double value_if_zero=DBL_MAX;
 		 	unsigned int nb_zeros=0;
 
 			for (int i=0;i<fitness_values.size();i++)
@@ -1128,7 +1128,7 @@ skeleton CHC
 		
 		}
 		
-		if (overall_fitness>MAXDOUBLE) overall_fitness=MAXDOUBLE;
+		if (overall_fitness>DBL_MAX) overall_fitness=DBL_MAX;
 
 		// calculate relative fitness
 		double previous=0.0;

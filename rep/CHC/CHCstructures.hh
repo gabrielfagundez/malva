@@ -5,14 +5,14 @@
 #include <fstream>
 #include <math.h>
 #include <values.h>
-#include <Mallba/Rlist.h>
-#include <Mallba/Rarray.h>
-#include <Mallba/Messages.h>
-#include <Mallba/mallba.hh>
-#include <Mallba/States.hh>
-#include <Mallba/random.hh>
-#include <Mallba/time.hh>
-#include <Mallba/netstream.hh>
+#include <Rlist.h>
+#include <Rarray.h>
+#include <Messages.h>
+#include <mallba.hh>
+#include <States.hh>
+#include <random.hh>
+#include <time.hh>
+#include <netstream.hh>
 #include <assert.h>
 
 using namespace std;

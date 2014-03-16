@@ -876,6 +876,15 @@ skeleton CHC
 			if (synchronized)    // synchronous mode: blocked until data are received	
 			{
 				pop.setup().pool().selector(migration_selection_2).prepare(pop.fitness_values(),true);
+
+				_netstream << set_source(MPI_ANY_SOURCE);
+				int tipo = 0;
+				_netstream._wait2(any,tipo);
+
+				if (tipo == 1){
+					return;
+				}
+
 				_netstream << wait(packed); 
 				_netstream << pack_begin; 
 			 	for (int i=0;i<migration_size;i++)

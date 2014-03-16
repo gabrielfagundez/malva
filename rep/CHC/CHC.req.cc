@@ -8,16 +8,24 @@ skeleton CHC
 
 	// Problem ---------------------------------------------------------------
 
-	Problem::Problem ()
+	Problem::Problem ():_dimension(0)
 	{}
 
 	ostream& operator<< (ostream& os, const Problem& pbm)
 	{
+		os << endl << endl << "Number of Variables " << pbm._dimension
+		   << endl;
 		return os;
 	}
 
 	istream& operator>> (istream& is, Problem& pbm)
 	{
+		char buffer[MAX_BUFFER];
+		int i;
+
+		is.getline(buffer,MAX_BUFFER,'\n');
+		sscanf(buffer,"%d",&pbm._dimension);
+
 		return is;
 	}
 
@@ -28,6 +36,7 @@ skeleton CHC
 
 	bool Problem::operator== (const Problem& pbm) const
 	{
+		if (_dimension!=pbm.dimension()) return false;	
 		return true;
 	}
 
@@ -42,12 +51,17 @@ skeleton CHC
 		//return minimize;
 	}
 
+	int Problem::dimension() const
+	{
+		return _dimension;
+	}
+
 	Problem::~Problem()
 	{}
 
 	// Solution --------------------------------------------------------------
 
-	Solution::Solution (const Problem& pbm):_pbm(pbm),_codewords(pbm.lenInBytes())
+	Solution::Solution (const Problem& pbm):_pbm(pbm),_var(pbm.dimension())
 	{}
 
 
@@ -64,28 +78,38 @@ skeleton CHC
 
 	istream& operator>> (istream& is, Solution& sol)
 	{
+		for (int i=0;i<sol.pbm().dimension();i++)
+			is >> sol._var[i];
+		
 		return is;
 	}
 
 	ostream& operator<< (ostream& os, const Solution& sol)
 	{
+		for (int i=0;i<sol.pbm().dimension();i++)
+			os << " " << sol._var[i];
 		return os;
 	}
 
 	NetStream& operator << (NetStream& ns, const Solution& sol)
 	{
+		for (int i=0;i<sol._var.size();i++)
+			ns << sol._var[i];
 		return ns;
 	}
 
 
 	NetStream& operator >> (NetStream& ns, Solution& sol)
 	{
+		for (int i=0;i<sol._var.size();i++)
+			ns >> sol._var[i];
 		return ns;
 	}
 
 
  	Solution& Solution::operator= (const Solution &sol)
 	{
+		_var=sol._var;
 		return *this;
 	}
 
@@ -102,12 +126,20 @@ skeleton CHC
 	}
 
 	void Solution::initialize()
-	{}
+	{
+		for (int i=0;i<_pbm.dimension();i++)
+			_var[i]=rand_int(0,1);
+	}
 
 
 	double Solution::fitness () const
 	{
-		double fitness=0.0;
+        double fitness = 0.0;
+
+		if(_var[0] == 2) return 0.0;
+			
+		for (int i=0;i<_var.size();i++)
+			fitness += _var[i];
 
 		return fitness;
 	}
@@ -115,36 +147,62 @@ skeleton CHC
 
 	char *Solution::to_String() const
 	{
-	 	return NULL;
+		return (char *)_var.get_first();
 	}
 
 
-	void Solution::to_Solution(char *_codewords_)
-	{}
+	void Solution::to_Solution(char *_string_)
+	{
+		int *ptr=(int *)_string_;
+		for (int i=0;i<_pbm.dimension();i++)
+		{
+			_var[i]=*ptr;
+			ptr++;
+		}
+	}
 
 	unsigned int Solution::size() const
 	{
-		return 0;
+		return (_pbm.dimension() * sizeof(int));
 	}
 
 	int Solution::lengthInBits() const
 	{
-		return 0;
+		return _pbm.dimension();
 	}
 
 	void Solution::flip(const int index)
-	{}
+	{
+			_var[index] = 1 - _var[index]; 
+	}
 
 	bool Solution::equalb(const int index,Solution &s)
 	{
-		return false;
+		return _var[index] == s._var[index];
 	}
 
 	void Solution::swap(const int index, Solution &s)
-	{}
+	{
+		int aux = s._var[index];
+		s._var[index] = _var[index];
+		_var[index] = aux;		
+	}
 
 	void Solution::invalid()
-	{}
+	{
+			_var[0] = 2;
+	}
+
+	int& Solution::var(const int index)
+	{
+		return _var[index];
+	}
+
+
+	Rarray<int>& Solution::array_var()
+	{
+		return _var;
+	}
 
 	Solution::~Solution()
 	{}
@@ -252,7 +310,7 @@ skeleton CHC
 
 	bool StopCondition_1::EvaluateCondition(const Problem& pbm,const Solver& solver,const SetUpParams& setup)
 	{
-		return false;
+		return ((int)solver.best_cost_trial() == pbm.dimension());
 	}
 
 	StopCondition_1::~StopCondition_1()

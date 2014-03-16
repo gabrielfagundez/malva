@@ -821,6 +821,15 @@ skeleton newGA
 			if (synchronized)    // synchronous mode: blocked until data are received	
 			{
 				pop.setup().pool().selector(migration_selection_2).prepare(pop.fitness_values(),true);
+
+				_netstream << set_source(MPI_ANY_SOURCE);
+				int tipo = 0;
+				_netstream._wait2(any,tipo);
+
+				if (tipo == 1){
+					return;
+				}
+
 				_netstream << wait(packed); 
 				_netstream << pack_begin; 
 			 	for (int i=0;i<migration_size;i++)
@@ -1018,7 +1027,7 @@ skeleton newGA
 		if ((direction==maximize && (remplace)) || ((direction==minimize) && (!(remplace))))
 		{
 			// fitness assigned if the fitness value is 0 in this case
-		 	double value_if_zero=MAXDOUBLE;
+		 	double value_if_zero=DBL_MAX;
 		 	unsigned int nb_zeros=0;
 
 			for (int i=0;i<fitness_values.size();i++)
@@ -1051,7 +1060,7 @@ skeleton newGA
 		
 		}
 		
-		if (overall_fitness>MAXDOUBLE) overall_fitness=MAXDOUBLE;
+		if (overall_fitness>DBL_MAX) overall_fitness=DBL_MAX;
 
 		// calculate relative fitness
 		double previous=0.0;
@@ -2390,7 +2399,7 @@ skeleton newGA
 			if (display_state()) show_state();
 		} // end while
 		
-		// Actualización de las estadísticas // Termination phase //
+		// Actualizaciï¿½n de las estadï¿½sticas // Termination phase //
 		iteration_best_found_in_trial(acum_iterations/(_netstream.pnumber()-1));
 		evaluations_best_found_in_trial(acum_evaluations/(_netstream.pnumber()-1));
 		

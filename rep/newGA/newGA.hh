@@ -1,8 +1,10 @@
 /*********************************************************************************************************
-***																								       ***
-***				    			  new Genetic Algorithm Skeleton v1.0 							       ***
-***							     Developed by: Gabriel Jesús Luque Polo							       ***
-***																								       ***
+***																									   ***
+***									new Genetic Algorithm Skeleton v1.5 							   ***
+***								  Developed by: Gabriel Jesús Luque Polo							   ***
+***										Last Update:  27-01-2003									   ***
+***																									   ***
+*** tabular size = 4																				   ***
 **********************************************************************************************************/
 
 #ifndef INC_newGA
@@ -59,6 +61,12 @@ skeleton newGA
 		bool operator!= (const Problem& pbm) const;
 
 		Direction direction () const;
+
+		int dimension() const;
+
+	private:
+
+		int _dimension;
   };
 
 //Solution ----------------------------------------------------------------------------
@@ -88,7 +96,11 @@ skeleton newGA
 		double fitness ();
 		unsigned int size() const;
 
+		int& var(const int index);
+		Rarray<int>& array_var();
+
 	private:
+		Rarray<int> _var;
 		const Problem& _pbm;
   };
 
@@ -116,7 +128,7 @@ skeleton newGA
 
 		friend ostream& operator<< (ostream& os, const UserStatistics& usertats);
 
-        	UserStatistics& operator= (const UserStatistics& userstats);
+        UserStatistics& operator= (const UserStatistics& userstats);
 		void update(const Solver& solver);
 		void clear();
  };
@@ -210,10 +222,10 @@ skeleton newGA
 		unsigned int    _population_size;		// number of individuals
 		unsigned int    _population_additional_size;	// size of offspring in each generation
 		bool            _combine;			// combines parents and offsprings to select new parents ?
-		bool 		_display_state;
+		bool			_display_state;
 
-		unsigned long    _refresh_global_state;
-		bool 		_synchronized;
+		unsigned long   _refresh_global_state;
+		bool			_synchronized;
 		unsigned int 	_check_asynchronous;
 
 		// selection of parents and offsprings
@@ -234,8 +246,8 @@ skeleton newGA
  		friend ostream& operator<< (ostream& os, const SetUpParams& setup);
 		friend istream& operator>> (istream& is, SetUpParams& setup);
 
-		const unsigned int    independent_runs() const;
-		const unsigned long    nb_evolution_steps() const;
+		const unsigned int  independent_runs() const;
+		const unsigned long nb_evolution_steps() const;
 		const unsigned int  population_size() const;
 		const unsigned int  population_additional_size() const;
 		const bool combine() const;
@@ -254,11 +266,11 @@ skeleton newGA
 		void synchronized(const bool val);
 		void check_asynchronous(const unsigned int val);
 
-	        // gets the i-th operator of inter-population
-	        const unsigned int  inter_operator_index(const unsigned int index) const;
+		// gets the i-th operator of inter-population
+	    const unsigned int  inter_operator_index(const unsigned int index) const;
 		const unsigned int  inter_operators_size() const;
 
-	        // gets the i-th operator of intra-population
+	    // gets the i-th operator of intra-population
 		const unsigned int intra_operator_index(const unsigned int index) const;
 		const unsigned int intra_operators_size() const;
 
@@ -321,10 +333,10 @@ skeleton newGA
 		unsigned int _upper_cost,_lower_cost; // lower and upper fitness of individuals in population
 		unsigned long _evaluations;
 		double _average_cost;
+		
+		inline void Evaluate(Solution* sols,struct individual &_f);
 
 	public:
-		inline void Evaluate(Solution *sol, struct individual &_f);
-		
 		Population(const Problem& pbm,const SetUpParams& setup); // crea un array de objetos population;
 		~Population();
 
@@ -456,7 +468,7 @@ skeleton newGA
 
 		friend ostream& operator<< (ostream& os, const Selection_Roulette_Wheel& sel);
 
-       	virtual void prepare(Rarray<struct individual>& fitness_values,const bool remplace); // const;
+        virtual void prepare(Rarray<struct individual>& fitness_values,const bool remplace); // const;
 		virtual struct individual select_one(const Rarray<Solution*>& to_select_1,const Rarray<Solution*>& to_select_2,const Rarray<struct individual>& fitness_values,const unsigned int dummy,const bool remplace) const;
   };
 
@@ -588,7 +600,7 @@ skeleton newGA
 		State_Vble _crossover_probability; // probability of applying the operator over population
 		State_Vble _mutation_probability; // probability of applying the operator over population
 		State_Vble _user_op_probability[MAX_OP_USER]; // probabilities of user operators
-	   	State_Vble _migration_rate;
+		State_Vble _migration_rate;
 		State_Vble _migration_size;
 		State_Vble _migration_selection_1;
 		State_Vble _migration_selection_2;
@@ -641,8 +653,8 @@ skeleton newGA
 
 		unsigned int current_trial() const;
 		unsigned long current_iteration() const;
-		unsigned long current_evaluations() const;
-		Solution current_best_solution() const;
+		unsigned long current_evaluations() const;		
+		Solution current_best_solution() const;		
 		double current_best_cost() const;
 		double current_worst_cost() const;
 		double current_average_cost() const;
@@ -667,12 +679,12 @@ skeleton newGA
 		float *crossover_probability() const;
 		float *mutation_probability() const;
 		float *user_op_probability(const int index) const;
-        unsigned int migration_rate() const;
-        unsigned int migration_size() const;
-        unsigned int migration_selection_1() const;
-        unsigned int migration_selection_2() const;
-        unsigned int migration_selection_conf_1() const;
-        unsigned int migration_selection_conf_2() const;
+	    unsigned int migration_rate() const;
+	    unsigned int migration_size() const;
+	    unsigned int migration_selection_1() const;
+	    unsigned int migration_selection_2() const;
+	    unsigned int migration_selection_conf_1() const;
+	    unsigned int migration_selection_conf_2() const;
 		unsigned int select_parents() const;
  		unsigned int select_offprings() const;
 		unsigned int parameter_select_parents() const;
@@ -758,11 +770,12 @@ skeleton newGA
 		float _time_best_found_in_trial;
 		unsigned long _iteration_best_found_in_trial;
 		unsigned long _evaluations_best_found_in_trial;
+	  
+	  	// Termination phase //
+	  	bool final_phase;
+	  	unsigned long acum_iterations;
+	  	unsigned long acum_evaluations;
 
-		// Termination phase //
-		bool final_phase;
-		int acum_evaluations;
-		int acum_iterations;
 
 	public:
 		Solver_Lan (const Problem& pbm, const SetUpParams& setup,int argc,char **argv);
@@ -807,10 +820,10 @@ skeleton newGA
 		unsigned long _iteration_best_found_in_trial;
 		unsigned long _evaluations_best_found_in_trial;
 
-		// Termination phase //
-		bool final_phase;
-		int acum_evaluations;
-		int acum_iterations;
+	  	// Termination phase //
+	  	bool final_phase;
+	  	unsigned long acum_iterations;
+	  	unsigned long acum_evaluations;
 
 	public:
 		Solver_Wan (const Problem& pbm, const SetUpParams& setup,int argc,char **argv);

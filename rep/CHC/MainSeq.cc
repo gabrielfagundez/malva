@@ -1,3 +1,5 @@
+#include <iostream>
+#include <fstream>
 #include "CHC.hh"
 
 int main (int argc, char** argv)

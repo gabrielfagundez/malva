@@ -1,27 +1,25 @@
+#include <iostream>
+#include <fstream>
 #include "CHC.hh"
+
+using namespace std;
 
 int main (int argc, char** argv)
 {
 	using skeleton CHC;
-	char path[MAX_BUFFER];
-	int len;
-	int longitud;
+	char path[MAX_BUFFER] = "";
 
 	system("clear");
 
-	get_path(argv[0],path);
-	len = strlen(path);
-	longitud = MAX_BUFFER - len;
-
-	strcat(path,"Config.cfg");
+	strcat(path,argv[1]);
 	ifstream f(path);
 	if(!f) show_message(10);
 
-	f.getline(&(path[len]),longitud,'\n');
+	f.getline(path,MAX_BUFFER,'\n');
 	ifstream f1(path);
 	if(!f1)	show_message(11);
 
-	f.getline(&(path[len]),longitud,'\n');
+	f.getline(path,MAX_BUFFER,'\n');
 	ifstream f2(path);
 	if(!f2) show_message(12);
 
@@ -32,7 +30,6 @@ int main (int argc, char** argv)
 	SetUpParams cfg(pool);
 	f1 >> cfg;
 
-
 	Solver_Lan solver(pbm,cfg,argc,argv);
 	solver.run();
 
@@ -41,7 +38,7 @@ int main (int argc, char** argv)
 		solver.show_state();
 		cout << "Solucion: " << solver.global_best_solution() << " Fitness: " << solver.global_best_solution().fitness();
 
-		f.getline(&(path[len]),longitud,'\n');
+		f.getline(path,MAX_BUFFER,'\n');
 	  	ofstream fexit(path);
 	  	if(!fexit) show_message(13);
 	  	fexit << solver.userstatistics();

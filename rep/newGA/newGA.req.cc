@@ -8,26 +8,30 @@ skeleton newGA
 
 	// Problem ---------------------------------------------------------------
 
-	Problem::Problem ()
+	Problem::Problem ():_dimension(0)
 	{}
 
 	ostream& operator<< (ostream& os, const Problem& pbm)
 	{
+		os << endl << endl << "Number of Variables " << pbm._dimension
+		   << endl;
 		return os;
 	}
 
 	istream& operator>> (istream& is, Problem& pbm)
 	{
-		return is;
-	}
+		char buffer[MAX_BUFFER];
+		int i;
 
-	Problem& Problem::operator=  (const Problem& pbm)
-	{
-		return *this;
+		is.getline(buffer,MAX_BUFFER,'\n');
+		sscanf(buffer,"%d",&pbm._dimension);
+
+		return is;
 	}
 
 	bool Problem::operator== (const Problem& pbm) const
 	{
+		if (_dimension!=pbm.dimension()) return false;
 		return true;
 	}
 
@@ -38,16 +42,22 @@ skeleton newGA
 
 	Direction Problem::direction() const
 	{
-		//return maximize;
-		return minimize;
+		return maximize;
+		//return minimize;
+	}
+
+	int Problem::dimension() const
+	{
+		return _dimension;
 	}
 
 	Problem::~Problem()
-	{}
+	{
+	}
 
 	// Solution --------------------------------------------------------------
 
-	Solution::Solution (const Problem& pbm):_pbm(pbm)
+	Solution::Solution (const Problem& pbm):_pbm(pbm),_var(pbm.dimension())
 	{}
 
 	const Problem& Solution::pbm() const
@@ -62,32 +72,43 @@ skeleton newGA
 
 	istream& operator>> (istream& is, Solution& sol)
 	{
+		for (int i=0;i<sol.pbm().dimension();i++)
+			is >> sol._var[i];
 		return is;
 	}
 
 	ostream& operator<< (ostream& os, const Solution& sol)
 	{
+		for (int i=0;i<sol.pbm().dimension();i++)
+			os << " " << sol._var[i];
 		return os;
 	}
 
 	NetStream& operator << (NetStream& ns, const Solution& sol)
 	{
+		for (int i=0;i<sol._var.size();i++)
+			ns << sol._var[i];
 		return ns;
 	}
 
 	NetStream& operator >> (NetStream& ns, Solution& sol)
 	{
+		for (int i=0;i<sol._var.size();i++)
+			ns >> sol._var[i];
 		return ns;
 	}
 
  	Solution& Solution::operator= (const Solution &sol)
 	{
+		_var=sol._var;
 		return *this;
 	}
 
 	bool Solution::operator== (const Solution& sol) const
 	{
 		if (sol.pbm() != _pbm) return false;
+		for(int i = 0; i < _var.size(); i++)
+			if(_var[i] != sol._var[i]) return false;
 		return true;
 	}
 
@@ -97,25 +118,51 @@ skeleton newGA
 	}
 
 	void Solution::initialize()
-	{}
+	{
+		for (int i=0;i<_pbm.dimension();i++)
+			_var[i]=rand_int(0,1);
+	}
 
 	double Solution::fitness ()
 	{
-		double fitness = 0.0;
+        double fitness = 0.0;
+
+		for (int i=0;i<_var.size();i++)
+			fitness += _var[i];
+
 		return fitness;
 	}
 
 	char *Solution::to_String() const
 	{
-		return NULL;
+		return (char *)_var.get_first();
 	}
 
 	void Solution::to_Solution(char *_string_)
-	{}
+	{
+		int *ptr=(int *)_string_;
+		for (int i=0;i<_pbm.dimension();i++)
+		{
+			_var[i]=*ptr;
+			ptr++;
+		}
+	}
 
 	unsigned int Solution::size() const
 	{
-		return 0;
+		return (_pbm.dimension() * sizeof(int));
+	}
+
+
+	int& Solution::var(const int index)
+	{
+		return _var[index];
+	}
+
+
+	Rarray<int>& Solution::array_var()
+	{
+		return _var;
 	}
 
 	Solution::~Solution()
@@ -164,13 +211,13 @@ skeleton newGA
 
 		if ((new_stat=(struct user_stat *)malloc(sizeof(struct user_stat)))==NULL)
 			show_message(7);
-		new_stat->trial         				 = solver.current_trial();
-		new_stat->nb_iteration_best_found_trial	 = solver.iteration_best_found_in_trial();
+		new_stat->trial         		 		 = solver.current_trial();
 		new_stat->nb_evaluation_best_found_trial = solver.evaluations_best_found_in_trial();
+		new_stat->nb_iteration_best_found_trial  = solver.iteration_best_found_in_trial();
 		new_stat->worst_cost_trial     		 	 = solver.worst_cost_trial();
 		new_stat->best_cost_trial     		 	 = solver.best_cost_trial();
 		new_stat->time_best_found_trial		 	 = solver.time_best_found_trial();
-		new_stat->time_spent_trial 			 	 = solver.time_spent_trial();
+		new_stat->time_spent_trial 		 		 = solver.time_spent_trial();
 
 		result_trials.append(*new_stat);
 	}
@@ -217,15 +264,30 @@ skeleton newGA
 	Intra_Operator::~Intra_Operator()
 	{}
 
-//  Crossover_PMX1:Intra_operator -------------------------------------------------------------
+//  Crossover:Intra_operator -------------------------------------------------------------
 
 	Crossover::Crossover():Intra_Operator(0)
 	{
-		//probability = new float[1];
+		probability = new float[1];
 	}
 
 	void Crossover::cross(Solution& sol1,Solution& sol2) const // dadas dos soluciones de la poblacion, las cruza
 	{
+		int i=0;
+		Rarray<int> aux(sol1.pbm().dimension());
+		aux=sol2.array_var();
+
+		int limit=rand_int((sol1.pbm().dimension()/2)+1,sol1.pbm().dimension()-1);
+		int limit2=rand_int(0,limit-1);
+
+		for (i=0;i<limit2;i++)
+			sol2.var(i)=sol1.var(i);
+		for (i=0;i<limit2;i++)
+			sol1.var(i)=aux[i];
+		for (i=limit;i<sol1.pbm().dimension();i++)
+			sol2.var(i)=sol1.var(i);
+		for (i=limit;i<sol1.pbm().dimension();i++)
+			sol1.var(i)=aux[i];
 	}
 
 	void Crossover::execute(Rarray<Solution*>& sols) const
@@ -237,14 +299,14 @@ skeleton newGA
 	ostream& operator<< (ostream& os, const Crossover&  cross)
 	{
 		 os << "Crossover." << " Probability: "
-//                  << cross.probability[0]
+                    << cross.probability[0]
 		    << endl;
 		 return os;
 	}
 
 	void Crossover::RefreshState(const StateCenter& _sc) const
 	{
-//		 _sc.set_contents_state_variable("_crossover_probability",(char *)probability,1,sizeof(float));
+		_sc.set_contents_state_variable("_crossover_probability",(char *)probability,1,sizeof(float));
 	}
 
 	void Crossover::UpdateFromState(const StateCenter& _sc)
@@ -256,8 +318,8 @@ skeleton newGA
 	void Crossover::setup(char line[MAX_BUFFER])
 	{
 		int op;
-//		sscanf(line," %d %f ",&op,&probability[0]);
-//		assert(probability[0]>=0);
+		sscanf(line," %d %f ",&op,&probability[0]);
+		assert(probability[0]>=0);
 	}
 
 	Crossover::~Crossover()
@@ -269,11 +331,19 @@ skeleton newGA
 
 	Mutation::Mutation():Intra_Operator(1)
 	{
-//		probability = new float[];
+		probability = new float[2];
 	}
 
 	void Mutation::mutate(Solution& sol) const
 	{
+		for (int i=0;i<sol.pbm().dimension();i++)
+		{
+			if (rand01()<=probability[1])
+			{
+				if (sol.var(i)==1) sol.var(i)=0;
+			 	else sol.var(i)=1;
+			}
+		}
 	}
 
 	void Mutation::execute(Rarray<Solution*>& sols) const
@@ -284,8 +354,8 @@ skeleton newGA
 
 	ostream& operator<< (ostream& os, const Mutation&  mutation)
 	{
-		os << "Mutation." << " Probability: "
-//		   << mutation.probability[0]
+		os << "Mutation." << " Probability: " << mutation.probability[0]
+		   << " Probability1: " << mutation.probability[1]
 		   << endl;
 		return os;
 	}
@@ -293,13 +363,14 @@ skeleton newGA
 	void Mutation::setup(char line[MAX_BUFFER])
 	{
 		int op;
-//		sscanf(line," %d %f",&op,&probability[0]);
-//		assert(probability[0]>=0);
+		sscanf(line," %d %f %f ",&op,&probability[0],&probability[1]);
+		assert(probability[0]>=0);
+		assert(probability[1]>=0);
 	}
 
 	void Mutation::RefreshState(const StateCenter& _sc) const
 	{
-//		_sc.set_contents_state_variable("_mutation_probability",(char *)probability,1,sizeof(probability));
+		_sc.set_contents_state_variable("_mutation_probability",(char *)probability,2,sizeof(probability));
 	}
 
 	void Mutation::UpdateFromState(const StateCenter& _sc)
@@ -320,7 +391,7 @@ skeleton newGA
 
 	bool StopCondition_1::EvaluateCondition(const Problem& pbm,const Solver& solver,const SetUpParams& setup)
 	{
-		return false;
+		return ((int)solver.best_cost_trial() == pbm.dimension());
 	}
 
 	StopCondition_1::~StopCondition_1()

@@ -1,19 +1,19 @@
 /*********************************************************************************************************
-***																								       ***
-***				      							CHC Skeleton v1.5					 			       ***
-***				    				 Developed by: Gabriel Jesús Luque Polo						       ***
-***												  													   ***
-***												  													   ***
+***												       												   ***
+***				      					CHC Skeleton v1.5	 			       						   ***
+***				     		   Developed by: Gabriel Jesús Luque Polo			    				   ***
+***												       												   ***
+***									  Last Update: 30-01-2004										   ***
+***												       												   ***
 **********************************************************************************************************/
 
+#ifndef INC_CHC
 #define INC_CHC
 #include "CHCstructures.hh"
 
 skeleton CHC
 {
-// Si se definen más de 5 nuevos operadores por parte del usuario, se debe cambiar esta constante.
 #define MAX_USER_OP 5
-// Si se algún operador tiene más de 5 parámetros se debe modificar esta variable
 #define MAX_PROB_PER_OP 5
 
   provides class SetUpParams;
@@ -57,6 +57,11 @@ skeleton CHC
 		bool operator!= (const Problem& pbm) const;
 
 		Direction direction () const;
+		int dimension() const;
+
+	private:
+
+		int _dimension;
   };
 
 //Solution ----------------------------------------------------------------------------
@@ -92,7 +97,11 @@ skeleton CHC
 		void swap(const int index, Solution &s);
 		void invalid();
 
+		int& var(const int index);
+		Rarray<int>& array_var();
+
 	private:
+		Rarray<int> _var;
 		const Problem& _pbm;
 
   };
@@ -230,6 +239,7 @@ skeleton CHC
 	private:
 		unsigned int    _independent_runs;
 		unsigned long   _nb_evolution_steps;
+		unsigned long   _nb_iteration_steps;
 		unsigned int    _population_size;		// number of individuals
 		bool 			_display_state;
 
@@ -334,8 +344,8 @@ skeleton CHC
 		double _average_cost;
 
 	public:
-		inline void Evaluate(Solution *sol, struct individual & _f);
-
+		inline void Evaluate(Solution *s, struct individual & _f);
+		
 		Population(const Problem& pbm,const SetUpParams& setup); // crea un array de objetos population;
 		~Population();
 
@@ -353,7 +363,7 @@ skeleton CHC
 		void interchange(const unsigned long current_generation, NetStream& channel);
 
 		// creates a array with fitness of all individuals in population and its position in the population
-	    	void evaluate_parents();
+    	void evaluate_parents();
 
 		// creates a array with fitness of all individuals and offsprings in population and its position in the population
 		void evaluate_offsprings();
@@ -440,7 +450,7 @@ skeleton CHC
 
 		friend ostream& operator<< (ostream& os, const Selection& sel);
 
-      	virtual void prepare(Rarray<struct individual>& fitness_values,const bool remplace); // const;
+       	virtual void prepare(Rarray<struct individual>& fitness_values,const bool remplace); // const;
 	  	virtual struct individual select_one(const Rarray<Solution*>& to_select_1,const Rarray<Solution*>& to_select_2,const Rarray<struct individual>& fitness_values,const unsigned int dummy,const bool remplace) const;
 	  	unsigned int number_selection() const;
 
@@ -602,9 +612,9 @@ skeleton CHC
 		const Problem&     problem;
 		const SetUpParams& params;
  		UserStatistics 	   _userstat;
-		Statistics     	   _stat;
+		Statistics         _stat;
 		Population 		   current_population;
-		StateCenter        _sc;
+		StateCenter		   _sc;
 
 		double 	   best_cost;
 		double 	   worst_cost;
@@ -658,7 +668,7 @@ skeleton CHC
 		State_Vble _select_offsprings;
 		State_Vble _parameter_select_new_pop;
 
-		State_Vble  _display_state;
+		State_Vble _display_state;
 
 	public:
 		Solver (const Problem& pbm, const SetUpParams& setup);

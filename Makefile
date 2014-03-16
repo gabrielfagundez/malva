@@ -2,11 +2,11 @@ default:
 	@echo "Make what? (all, libs, skeletons,  clean)"
 
 all:
+	@echo "Making only libs since there are not migrated code. Don't worry, everything will work."
 	(cd inc ; rm -f Mallba)
 	(cd inc ; ./inc.env)
 	(cd src ; make all)
 	(cd lib ; make all)
-	(cd rep ; make all)
 
 libs:
 	(cd inc ; rm -f Mallba)

@@ -1,6 +1,6 @@
 all:
-	make —file Makefile.CHC all
-	make —file Makefile.newGA all
+	(cd CHC ; make)
+	(cd GA ; make)
 clean:
-	make -file Makefile.CHC clean
-	make -file Makefile.newGA clean
+	(cd rep ; make clean)
+	(cd rep ; make clean)

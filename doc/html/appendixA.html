@@ -1,0 +1,232 @@
+<html><head><title>EA Parameters</title>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="lib.css" rel="stylesheet"></head><body bgcolor="#ffffff" text="#000000">
+<h1><b>Appendix: Evolutionary Algorithms Parameters</b></h1>
+<a href="examples.html">[Previous]</a> <a href="appendixA.html">[Next]</a> <a href="../index.html">[Home]</a> <a name="contenido"></a> <br>
+<h2>Contents</h2>
+<ul>
+  <li><a href="#selection">Selection Methods</a></li>
+  <li><a href="#intra">Intra-population Operators</a></li>
+  <li><a href="#inter">Inter-population Operators</a></li>
+</ul>
+<h3>Selection Methods<a name="selection"></a></h3>
+<p align="justify"> In the following table is shown the selection methods that 
+  you can be chosen to configurie the evolutionary algorithms skeletons (except 
+  CHC). </p>
+<table align="center" border="1" width="800">
+  <tbody><tr>
+    <td>
+      <div align="center"><b>Selection Methods</b></div>
+    </td>
+  </tr>
+  </tbody></table>  
+  
+<table align="center" border="1" width="800">
+  <tbody><tr> 
+    <td> 
+      <div align="center"><b>Id.</b></div>
+    </td>
+    <td> 
+      <div align="center"><b>Default Parameter</b></div>
+    </td>
+    <td> 
+      <div align="center"><b>Name</b></div>
+    </td>
+    <td> 
+      <div align="center"><b>Parameter Description</b></div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="center">0</div>
+    </td>
+    <td> 
+      <div align="center">-</div>
+    </td>
+    <td> 
+      <div align="center">Random</div>
+    </td>
+    <td> 
+      <div align="center">-</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="center">1</div>
+    </td>
+    <td> 
+      <div align="center">1</div>
+    </td>
+    <td> 
+      <div align="center">Tournament</div>
+    </td>
+    <td> 
+      <div align="center">Size of sample</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="center">2</div>
+    </td>
+    <td> 
+      <div align="center">-</div>
+    </td>
+    <td> 
+      <div align="center">Roulette_Wheel</div>
+    </td>
+    <td> 
+      <div align="center">-</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="center">3</div>
+    </td>
+    <td> 
+      <div align="center">100</div>
+    </td>
+    <td> 
+      <div align="center">Ranking</div>
+    </td>
+    <td> 
+      <div align="center">Percent of population that the method uses.</div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="center">4</div>
+    </td>
+    <td> 
+      <div align="center">0</div>
+    </td>
+    <td> 
+      <div align="center">Best (Rank-based)</div>
+    </td>
+    <td> 
+      <div align="center">The position of an individual in the ordered population 
+      </div>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <div align="center">5</div>
+    </td>
+    <td> 
+      <div align="center">0</div>
+    </td>
+    <td> 
+      <div align="center">Worst (Rank-based)</div>
+    </td>
+    <td> 
+      <div align="center">The position of an individual in the reverse-ordered 
+        population </div>
+    </td>
+  </tr>
+</tbody></table>
+<p align="justify">These methods can be used in <i>selection section</i> of the 
+  cofiguration file and in the configuration of the migration operator. </p>
+<p align="justify">In the CHC skeleton, the selection methods are not optional. In the selection 
+  section of the CHC configuration file, you must choose the parameter (percent 
+  of population that will restarted) of replace method and the diverge operator 
+  that will used to restart the population whenever convergence is detected.</p>
+<p align="center"><a href="#contenido">[Up]</a></p>
+<h3> Intra-population Operators<a name="intra"></a></h3>
+<p align="justify">Intra-population operators:</p>
+
+<blockquote>
+  <table border="1" width="600">
+    <tbody><tr> 
+      <td> 
+        <div align="center"><b>Id.</b></div>
+      </td>
+      <td> 
+        <div align="center"><b>Name</b></div>
+      </td>
+      <td> 
+        <div align="center"><b>Parameters*</b></div>
+      </td>
+      <td> 
+        <div align="center"><b>Others</b></div>
+      </td>
+    </tr>
+    <tr> 
+      <td> 
+        <div align="center">0</div>
+      </td>
+      <td> 
+        <div align="center">Crossover</div>
+      </td>
+      <td> 
+        <div align="center">Application probability</div>
+      </td>
+      <td> 
+        <div align="center">HUX in CHC</div>
+      </td>
+    </tr>
+    <tr> 
+      <td> 
+        <div align="center">1</div>
+      </td>
+      <td> 
+        <div align="center">Mutation</div>
+      </td>
+      <td> 
+        <div align="center">Application probability</div>
+      </td>      
+	  <td> 
+        <div align="center">bit-flip in CHC</div>
+      </td>
+    </tr>
+    <tr> 
+      <td> 
+        <div align="center">2</div>
+      </td>
+      <td> 
+        <div align="center">Hybrid operator</div>
+      </td>
+      <td> 
+        <div align="center">Application probability</div>
+      </td>
+      <td> 
+        <div align="center">only in newGASA</div>
+      </td>
+    </tr>
+    <tr> 
+      <td> 
+        <div align="center">3-</div>
+      </td>
+      <td> 
+        <div align="center">Other operators</div>
+      </td>
+      <td> 
+        <div align="center">Application probability</div>
+      </td>
+      <td> 
+        <div align="center">-</div>
+      </td>
+
+    </tr>
+  </tbody></table>
+</blockquote>
+<div class="mini">*Perhaps, the concrete operator implemented by the user needs more parameters</div>
+<p align="center"><a href="#contenido">[Up]</a> </p>
+<h3> Inter-population Operators<a name="inter"></a></h3>
+<p align="justify">Intra-population operators are the operators that are applied 
+  between sub-populations. Currently, the skeletons only have got a single inter-population 
+  operator, the migration operator. In order to configure this operator, you must 
+  define:</p>
+<ul>
+  <li>operator number (0)</li>
+  <li> operator rate</li>
+  <li> number of individuals </li>
+  <li>selection method (and its parameters) of individual to send </li>
+  <li>and replace method (and its parameters) of individual to send . <br>
+  </li>
+</ul>
+<p align="center"><a href="#contenido">[Up]</a> </p>
+
+<h2 align="center">&nbsp;</h2>
+<a href="examples.html">[Previous]</a> <a href="appendixA.html">[Next]</a> <a href="../index.html">[Home]</a> 
+</body></html>

@@ -1,0 +1,12 @@
+all:
+	(cd newGA/maxsat; make all)
+	(cd newGA/onemax; make all)
+	(cd newGA/sphere; make all)
+	(cd newGA/vrp; make all)
+	(cd newGA/dnafa; make all)
+clean:
+	(cd newGA/maxsat; make clean)
+	(cd newGA/onemax; make clean)
+	(cd newGA/sphere; make clean)
+	(cd newGA/vrp; make clean)
+	(cd newGA/dnafa; make clean)

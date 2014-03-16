@@ -1,0 +1,6 @@
+all:
+	(cd PSO/onemax; make all)
+	(cd PSO/soco2010; make all)
+clean:
+	(cd PSO/onemax; make clean)
+	(cd PSO/soco2010; make clean)

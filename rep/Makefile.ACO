@@ -1,0 +1,6 @@
+all:
+	(cd ACO/atsp; make all)
+	(cd ACO/mttp; make all)
+clean:
+	(cd ACO/atsp; make clean)
+	(cd ACO/mttp; make clean)

@@ -1,0 +1,8 @@
+all:
+	(cd CHC/maxsat; make all)
+	(cd CHC/onemax; make all)
+	(cd CHC/rnd; make all)
+clean:
+	(cd CHC/maxsat; make clean)
+	(cd CHC/onemax; make clean)
+	(cd CHC/rnd; make clean)

@@ -1,0 +1,373 @@
+<html><head><title>Examples</title>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="lib.css" rel="stylesheet"></head><body bgcolor="#ffffff" text="#000000">
+<h1><b>Examples</b></h1>
+<a href="algorithms.html">[Previous]</a> <a href="appendixA.html">[Next]</a> <a href="../index.html">[Home]</a> <a name="contenido"></a> <br>
+<h2>Contents</h2>
+<ul>
+  <li><a href="#ms">MAXSAT</a></li>
+  <li><a href="#om">ONEMAX</a></li>
+  <li><a href="#sphere">Sphere Function</a></li>
+  <li><a href="#rastrigin">Rastrigin Function</a></li>
+</ul>
+<h3>MAXSAT<a name="ms"></a></h3>
+<p align="justify">The SAT problem consists of a set of <i>n</i> variables and 
+  a set of <i>m </i>clauses. The goal of the SAT problem is to determine whether 
+  or not there exists an assignment <i>t</i> of truth values to variables that 
+  makes the formula <i>f</i> in CNF satisfiable. Among the extensions to SAT, 
+  MAX-SAT is the most known, In this case, a parameter <i>K</i> is given and the 
+  problem is to determine if there exists an assignment <i>t</i> of truth values 
+  to variables such that at least <i>K</i> clauses are satisfied. SAT can be considerated 
+  as a special case of MAX-SAT when <i>K</i> equals the number <i>m </i>of clauses.</p>
+<p align="justify">Implementation of <font face="Courier New, Courier, mono">operator&gt;&gt;</font> 
+  (class <font face="Courier New, Courier, mono">Problem</font>). This operator 
+  reads the problem instance.</p>
+<div class="ejemplo">
+  <pre><font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    istream&amp; operator&gt;&gt; (istream&amp; is, Problem&amp; pbm)</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    int l,n;
+</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    is &gt;&gt; pbm._numvar &gt;&gt; pbm._numclause &gt;&gt; pbm._lenclause;</font> </pre>
+  <pre><font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;       n = pbm._lenclause;</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    pbm._clauses = new int*[pbm._numclause];</font> </pre>
+  <pre><font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;       // read clauses</font> <font face="Courier New,Courier">
+               for (int i = 0; i &lt; pbm._numclause; i++)</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    {</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    pbm._clauses[i] = new int[n];</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    for(int j = 0; j &lt; n;j++)</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    {</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    is &gt;&gt; l;</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    pbm._clauses[i][j] = l;</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    }</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    is &gt;&gt; l;</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    }</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</font> </pre>
+</div>
+   
+<p>Implementation of <font face="Courier New, Courier, mono">initialize</font> 
+  method (class <font face="Courier New, Courier, mono">Solution</font>). This 
+  method generates a solution.</p>
+<div class="ejemplo">
+  <pre><font face="Courier New,Courier">         void Solution::initialize()</font> 
+  <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  {</font> <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+               for (int i=0;i&lt;_pbm.numvar();i++)</font> <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                   _var[i]=rand_int(0,1);</font> <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+         }</font> 
+</pre>
+</div>
+<p>Implementation of <font face="Courier New, Courier, mono">fitness</font> method 
+  (class <font face="Courier New, Courier, mono">Solution</font>). This method 
+  calculates the fitness value of the individual.</p>
+<div class="ejemplo">
+  <pre><font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    double Solution::fitness ()</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    double fitness = 0.0;</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    int acum = 0;</font> </pre>
+  <pre><font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;       for(int i = 0; i &lt; _pbm.numclause(); i++)</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    {</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    int *rl = _pbm.clause(i);</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    acum = 0;</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    for(int j = 0; (j &lt; _pbm.lenclause()) &amp;&amp; (acum != 1);j++)</font>    
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    {</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    if( ((rl[j] &lt; 0) &amp;&amp; (_var[(int)abs(rl[j])-1] == 0))</font>    
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    || ((rl[j] &gt; 0) &amp;&amp; (_var[rl[j]-1] == 1)) )</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    acum = 1;</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    }</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    fitness += acum;</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    }</font> 
+<font face="Courier New,Courier">               return fitness;</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</font>  </pre>
+</div>
+<p>There are several basic steps to running this problem solve with the previous 
+  skeletons:</p>
+<blockquote> 
+  <p>1. Install Mallba Library (see <a href="mallba.html#htma">How to install 
+    Mallba</a>)<br>
+    2. Change to the maxsat directory</p>
+  <blockquote>
+    <p class="ejemplo">cd Mallba/rep/&lt;skeleton&gt;/maxsat</p>
+  </blockquote>
+    
+  <p>3. Compile skeleton
+  </p><blockquote> 
+    <p class="ejemplo">make</p>
+  </blockquote>
+  <p>3. Configure algorithm parameters<font face="Courier New,Courier">:</font> 
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.1 Configure <b><font face="Courier New, Courier, mono">&lt;skeleton&gt;.cfg</font></b> 
+    file. <i>(Optional Step)</i><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.2 Configure <b><font face="Courier New, Courier, mono">newGASA.cfg</font></b> 
+    file (only for newGASA skeleton)<br>
+    4. Run problem: <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.1 Sequential Version: 
+  </p><blockquote>
+  <blockquote>
+      <p class="ejemplo"> make SEQ </p>
+  </blockquote>
+  </blockquote>
+ 
+  <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2 Parallel Version: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.1
+Configure <b><font face="Courier New, Courier, mono">Config.cfg</font></b> 
+    file (except newGASA skeleton). <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.2
+Configure <b><font face="Courier New, Courier, mono">pgfileLan</font></b> 
+    (or <b><font face="Courier New, Courier, mono">pgfileWan</font></b>) : machines 
+    where we run the program. <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.3
+Run </p>
+  <blockquote>
+  <blockquote>
+  <blockquote>
+  <blockquote>
+    <p class="ejemplo">
+	make LAN <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or <br>
+	make WAN </p>
+  </blockquote>
+  </blockquote>
+  </blockquote>
+  </blockquote>
+</blockquote>
+<p align="center"><a href="#contenido">[Up]</a></p>
+<h3> ONEMAX<a name="om"></a></h3>
+    
+<p align="justify">The goal of ONEMAX problem is to maximize the number of 1's 
+  in the bitstring</p>
+<p align="justify"></p>
+<p align="justify">Implementation of <font face="Courier New, Courier, mono">initialize</font> 
+  method (class <font face="Courier New, Courier, mono">Solution</font>). This 
+  method generates a solution.</p>
+<div class="ejemplo"> 
+  <pre><font face="Courier New,Courier">         void Solution::initialize()</font> 
+  <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  {</font> <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+               for (int i=0;i&lt;_pbm.dimesion();i++)</font> <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                   _var[i]=rand_int(0,1);</font> <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+         }</font> 
+</pre>
+</div>
+<p>Implementation of <font face="Courier New, Courier, mono">fitness</font> method 
+  (class <font face="Courier New, Courier, mono">Solution</font>). This method 
+  calculates the fitness value of the individual.</p>
+<div class="ejemplo"> 
+  <pre><font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    double Solution::fitness ()</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    double fitness = 0.0;</font> <font face="Courier New,Courier"><font size="-1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</font></font><font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+               for (int i=0;i&lt;_var.size();i++)</font> <br><font face="Courier New,Courier">                   fitness += _var[i];</font> <br><font face="Courier New,Courier">
+               return fitness;</font> 
+   <font face="Courier New,Courier"><font size="-1"></font></font><font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</font>  </pre>
+  </div>
+<p>There are several basic steps to running this problem solve with the previous 
+  skeletons:</p>
+<blockquote> 
+  <p>1. Install Mallba Library (see <a href="mallba.html#htma">How to install 
+    Mallba</a>)<br>
+    2. Change to the onemax directory</p>
+  <blockquote> 
+    <p class="ejemplo">cd Mallba/rep/&lt;skeleton&gt;/onemax</p>
+  </blockquote>
+  <p>3. Compile skeleton 
+  </p><blockquote> 
+    <p class="ejemplo">make</p>
+  </blockquote>
+  <p>3. Configure algorithm parameters<font face="Courier New,Courier">:</font> 
+    <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.1 Configure <b><font face="Courier New, Courier, mono">&lt;skeleton&gt;.cfg</font></b> 
+    file. <i>(Optional Step)</i><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.2 Configure <b><font face="Courier New, Courier, mono">newGASA.cfg</font></b> 
+    file (only for newGASA skeleton)<br>
+    4. Run problem: <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.1 Sequential Version: 
+  </p><blockquote> 
+    <blockquote> 
+      <p class="ejemplo"> make SEQ </p>
+    </blockquote>
+  </blockquote>
+  <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2 Parallel Version: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.1
+Configure <b><font face="Courier New, Courier, mono">Config.cfg</font></b> 
+    file (except newGASA skeleton). <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.2
+Configure <b><font face="Courier New, Courier, mono">pgfileLan</font></b> 
+    (or <b><font face="Courier New, Courier, mono">pgfileWan</font></b>) : machines 
+    where we run the program. <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.3
+Run </p>
+  <blockquote> 
+    <blockquote> 
+      <blockquote> 
+        <blockquote> 
+          <p class="ejemplo"> make LAN <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or <br>
+            make WAN </p>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+<p align="center"><a href="#contenido">[Up]</a> </p>
+<h3> Sphere Function<a name="sphere"></a></h3>
+<p align="justify">This problem consists in finding a value vector <b>x </b>that 
+  minimized the following equation (Sphere Function):</p>
+<p align="center"><img src="../img/sphere.gif">&nbsp;&nbsp; &nbsp;</p>
+<p align="center"><img src="../img/ras3.gif"></p>
+<p align="justify">This problem is only implemented in ES skeleton.</p>
+<p align="justify"></p>
+<p align="justify"></p>
+<p align="justify"></p>
+<p align="justify"></p>
+<p align="justify"></p>
+<p align="justify">Implementation of <font face="Courier New, Courier, mono">initialize</font> 
+  method (class <font face="Courier New, Courier, mono">Solution</font>). This 
+  method generates a solution. Usually, you do not need this method.</p>
+<div class="ejemplo"> 
+  <pre><font face="Courier New,Courier">         void Solution::initialize()</font> 
+  <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  {</font> <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <font face="Courier New, Courier, mono">
+             </font></font><font face="Courier New, Courier, mono">float min = _pbm.minvalue(0);<br>             float rang = _pbm.maxvalue(0) - min;
+
+   </font><font face="Courier New, Courier, mono">          for (int i=0;i&lt;_pbm.dimension();i++)<br>             {<br>                 _variables[i] = (float) (rand01()*rang) + min;<br>                 _parameters[i] = (float) rand01()*2.0 - 1.0;<br>             }<br>
+             for (int i = 0; i &lt; ((_pbm.dimension() * (_pbm.dimension() - 1)) / 2);i++)<br>                 _angles[i] = (float) (rand01() * 2 * PI);<br></font><font face="Courier New,Courier">         }</font> 
+</pre>
+</div>
+<p>Implementation of <font face="Courier New, Courier, mono">fitness</font> method 
+  (class <font face="Courier New, Courier, mono">Solution</font>). This method 
+  calculates the fitness value of the individual.</p>
+<div class="ejemplo"> 
+  <pre><font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    double Solution::fitness ()</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {</font> 
+               <font face="Courier New, Courier, mono">double fitness = 0.0;
+
+               for(int i = 0; i &lt; _pbm.dimension(); i++)<br>                  fitness += _variables[i]*_variables[i];<br>
+               return fitness;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    }  </font></pre>
+</div>
+<p>There are several basic steps to running this problem solve with the ES skeleton:</p>
+<blockquote> 
+  <p>1. Install Mallba Library (see <a href="mallba.html#htma">How to install 
+    Mallba</a>)<br>
+    2. Change to the sphere problem directory</p>
+  <blockquote> 
+    <p class="ejemplo">cd Mallba/rep/ES/sphere</p>
+  </blockquote>
+  <p>3. Compile skeleton 
+  </p><blockquote> 
+    <p class="ejemplo">make</p>
+  </blockquote>
+  <p>3. Configure algorithm parameters<font face="Courier New,Courier"> (</font><b><font face="Courier New, Courier, mono">ES.cfg</font></b> 
+    file). <i>(Optional Step)</i><br>
+    4. Run problem: <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.1 Sequential Version: 
+  </p><blockquote> 
+    <blockquote> 
+      <p class="ejemplo"> make SEQ </p>
+    </blockquote>
+  </blockquote>
+  <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2 Parallel Version: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.1
+Configure <b><font face="Courier New, Courier, mono">Config.cfg</font></b> 
+    file.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.2
+Configure <b><font face="Courier New, Courier, mono">pgfileLan</font></b> 
+    (or <b><font face="Courier New, Courier, mono">pgfileWan</font></b>) : machines 
+    where we run the program. <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.3
+Run </p>
+  <blockquote> 
+    <blockquote> 
+      <blockquote> 
+        <blockquote> 
+          <p class="ejemplo"> make LAN <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or <br>
+            make WAN </p>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+<p align="center"><a href="#contenido">[Up]</a> </p>
+<h3> Rastrigin Function<a name="rastrigin"></a></h3>
+<p align="justify">This problem consists in finding a value vector <b>x </b>that 
+  minimized the following equation (Rastrigin Function):</p>
+<p align="center"><img src="../img/rastrigin.gif"></p>
+<p align="center"><img src="../img/ras1.gif" align="middle">&nbsp;&nbsp; <img src="../img/ras2.gif" align="middle">&nbsp;&nbsp;<img src="../img/ras3.gif" align="middle"></p>
+<p align="justify">This problem is only implemented in ES skeleton.</p>
+<p align="justify"></p>
+<p align="justify"></p>
+<p align="justify"></p>
+<p align="justify"></p>
+<p align="justify"></p>
+<p align="justify">Implementation of <font face="Courier New, Courier, mono">initialize</font> 
+  method (class <font face="Courier New, Courier, mono">Solution</font>). This 
+  method generates a solution. Usually, you do not need this method.</p>
+<div class="ejemplo">
+  <pre><font face="Courier New,Courier">         void Solution::initialize()</font> 
+  <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  {</font> <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+</font><font face="Courier New, Courier, mono">             </font><font face="Courier New, Courier, mono">float min = _pbm.minvalue(0);<br>             float rang = _pbm.maxvalue(0) - min;
+
+   </font><font face="Courier New, Courier, mono">          for (int i=0;i&lt;_pbm.dimension();i++)<br>             {<br>                 _variables[i] = (float) (rand01()*rang) + min;<br>                 _parameters[i] = (float) rand01()*2.0 - 1.0;<br>             }<br>
+             for (int i = 0; i &lt; ((_pbm.dimension() * (_pbm.dimension() - 1)) / 2);i++)<br>                 _angles[i] = (float) (rand01() * 2 * PI);<br></font><font face="Courier New,Courier">         }</font> 
+</pre>
+  </div>
+<p>Implementation of <font face="Courier New, Courier, mono">fitness</font> method 
+  (class <font face="Courier New, Courier, mono">Solution</font>). This method 
+  calculates the fitness value of the individual.</p>
+<div class="ejemplo"> 
+  <pre><font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    double Solution::fitness ()</font> 
+   <font face="Courier New,Courier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {</font> 
+               <font face="Courier New, Courier, mono">double fitness = 0.0,acum,aux;
+
+               for(int i = 0; i &lt; _pbm.dimension(); i++)<br>               {<br>                  aux = (double) _variables[i];<br>                  acum = aux*aux - 10*cos(2*PI*aux);<br>                  fitness += acum;<br>               }<br>
+               fitness += (10.0 * _pbm.dimension());
+               return fitness;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    }  </font></pre>
+  </div>
+<p>There are several basic steps to running this problem solve with the ES skeleton:</p>
+<blockquote> 
+  <p>1. Install Mallba Library (see <a href="mallba.html#htma">How to install 
+    Mallba</a>)<br>
+    2. Change to the rastrigin directory</p>
+  <blockquote> 
+    <p class="ejemplo">cd Mallba/rep/ES/rastrigin</p>
+  </blockquote>
+  <p>3. Compile skeleton 
+  </p><blockquote> 
+    <p class="ejemplo">make</p>
+  </blockquote>
+  <p>3. Configure algorithm parameters<font face="Courier New,Courier"> (</font><b><font face="Courier New, Courier, mono">ES.cfg</font></b> 
+    file). <i>(Optional Step)</i><br>
+    4. Run problem: <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.1 Sequential Version: 
+  </p><blockquote> 
+    <blockquote> 
+      <p class="ejemplo"> make SEQ </p>
+    </blockquote>
+  </blockquote>
+  <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2 Parallel Version: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.1
+Configure <b><font face="Courier New, Courier, mono">Config.cfg</font></b> 
+    file.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.2
+Configure <b><font face="Courier New, Courier, mono">pgfileLan</font></b> 
+    (or <b><font face="Courier New, Courier, mono">pgfileWan</font></b>) : machines 
+    where we run the program. <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.3
+Run </p>
+  <blockquote> 
+    <blockquote> 
+      <blockquote> 
+        <blockquote> 
+          <p class="ejemplo"> make LAN <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or <br>
+            make WAN </p>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+<p align="center"><a href="#contenido">[Up]</a></p>
+<h2 align="center">&nbsp;</h2>
+<a href="algorithms.html">[Previous]</a> <a href="appendixA.html">[Next]</a> <a href="../index.html">[Home]</a> 
+</body></html>

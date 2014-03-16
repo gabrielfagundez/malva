@@ -1,0 +1,132 @@
+<html><head><title>Mallba Introduction</title>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="lib.css" rel="stylesheet"></head><body bgcolor="#ffffff" text="#000000">
+<h1><b>Mallba Library</b><a name="ma"></a></h1>
+<a href="mallba.html">[Previous]</a> <a href="algorithms.html">[Next]</a> <a href="../index.html">[Home]</a> <a name="contenido"></a> <br>
+<h2>Contents</h2>
+<ul>
+  <li><a href="#introma">Introduction</a></li>
+  <li><a href="#archma">Mallba Architecture</a></li>
+  <li><a href="#impma">Implementation</a></li>
+  <li><a href="#htma">How to install Mallba</a></li>
+</ul>
+<h3>Introduction<a name="introma"></a></h3>
+<p>The <a href="http://www.lsi.upc.es/%7Emallba" target="_blank">MALLBA project</a> 
+  is an effort to develop, in an integrated way, a library of skeletons for combinatorial 
+  optimization (including exact, heuristic and hybrid methods) that can deal with 
+  parallelism in a user-friendly and, at the same time, efficient manner. Its 
+  three target environments are sequential computers, LANs of workstations and 
+  WANs. The main features of MALLBA are: </p>
+<ul>
+  <li> Integration of all the skeletons under the same design principles.</li>
+  <li> Facility to switch from sequential to parallel optimization engines. By 
+    providing sequential implementations users obtain parallel implementations.</li>
+  <li> Cooperation between engines makes possible to provide more powerful hybrid 
+    engines.</li>
+  <li> Ready to use on commodity machines.</li>
+  <li> Flexible and extensible software architecture. New skeletons can easily 
+    be added, alternative communication layers can be used, etc.</li>
+</ul>
+<p align="center"><a href="#contenido">[Up]</a></p>
+<h3> Mallba Architecture<a name="archma"></a></h3>
+<p align="justify">Mallba <i><b>skeletons</b></i> are based on the separation 
+  of two concepts: the concrete problem to be solved and the general resolution 
+  method to be used. They can be seen as generic templates that just need to be 
+  instantiated with the features of a problem in order to solve it. All features 
+  related to the selected generic resolution method and its interaction with the 
+  concrete problem are implemented by the skeleton. While the particular features 
+  related to the problem must be given by the user, the knowledge to parallelize 
+  the execution of the resolution method is implemented in the skeleton, so that 
+  users do not need to deal with parallelism issues. </p>
+<p align="justify">The design of the Mallba library focuses on easy to use skeletons 
+  and general and efficient implementations. To achieve both objectives, the C++ 
+  programming language was selected due to its high level, modularity, flexibility 
+  and efficiency features. We have reduced to a minimum the use of inheritance 
+  and virtual methods in order to provide better efficiency and ease of use. To 
+  instantiate most problems, a basic knowledge of C++ is enough, and only sequential 
+  code without side effects is needed. </p>
+<p align="justify">Skeletons are implemented by a set of <i><b>required</b></i> 
+  and <i><b>provided</b> </i>C++ classes that represent an abstraction of the 
+  entities participating in the resolution method. The <i><b>provided</b></i> 
+  classes implement internal aspects of the skeleton in a problem-independent 
+  way. The <i><b>required</b></i> classes specify information and behavior related 
+  to the problem. This conceptual separation allows us to define required classes 
+  with a fixed interface but without any implementation, so that provided classes 
+  can use required classes in a generic way. </p>
+<p align="justify">More specifically, each skeleton includes the <font face="Courier New, Courier, mono"><b>Problem</b></font> 
+  and <font face="Courier New, Courier, mono"><b>Solution</b></font> required 
+  classes, that encapsulate the problem-dependent entities needed by the resolution 
+  method. The <font face="Courier New, Courier, mono"><b>Problem</b></font> class 
+  abstracts the features of the problem that are relevant to the selected optimization 
+  method. The <font face="Courier New, Courier, mono"><b>Solution</b></font> class 
+  abstracts the features of the feasible solutions that are relevant to the selected 
+  resolution method. Depending on the skeleton, other classes may be required. 
+  On the other hand, each skeleton offers two provided classes: <font face="Courier New, Courier, mono"><b>Solver</b></font> 
+  and <font face="Courier New, Courier, mono"><b>SetUpParams</b></font>. The former 
+  abstracts the selected resolution method. The later contains the setup parameters 
+  needed to perform the execution (e.g. number of iterations, number of independent 
+  runs, parameters guiding the search, etc.). The <font face="Courier New, Courier, mono"><b>Solver</b></font> 
+  class provides methods to run the resolution scheme and methods to consult its 
+  progress or change its state. The only information the solver needs is an instance 
+  of the problem to solve and the setup parameters. In order to enable an skeleton 
+  to have different solver engines, the <font face="Courier New, Courier, mono"><b>Solver</b></font> 
+  class defines a unique interface and provides several subclasses that provide 
+  different sequential and parallel implementations (<font face="Courier New, Courier, mono"><b>Solver_Seq</b></font>, 
+  <font face="Courier New, Courier, mono"><b>Solver_Lan</b></font> and <font face="Courier New, Courier, mono"><b>Solver_Wan</b></font>). 
+  In Fig. 1 is shown the common design of Mallba skeletons. </p>
+<p><br>
+  </p><center>
+    <p><img src="../img/uml-comun.gif"> </p>
+    <p><a href="#contenido">[Up]</a> </p>
+  </center>
+<p></p>
+<h3> Implementation<a name="impma"></a></h3>
+<p>The implementation of each skeleton is contained in three files: </p>
+<ul>
+  <li><b>&lt;skeleton&gt;.hh:</b> The file containing the definition of all classes 
+    (provides and requires).</li>
+  <li><b>&lt;skeleton&gt;.pro.cc:</b> The file containing the source code of the 
+    classes needed for the&nbsp; internal implementation of the method.</li>
+  <li><b>&lt;skeleton&gt;.req.cc:</b> The source file where all the required classes 
+    will be implemented.</li>
+</ul>
+<p>In additional, the user must configure the method parameters in the file <b>&lt;skeleton&gt;.cfg.</b> 
+</p>
+<p align="center"><a href="#contenido">[Up]</a> </p>
+<h3> How to install Mallba<a name="htma"></a></h3>
+<p>There are several basic steps to building and installing the Mallba Library: 
+</p>
+<blockquote> 1. Download the source file (<a href="source/mallba.tar.gz">download</a>)<br>
+  2. You need to have installed <b>MPICH</b> (you can get it from <a href="http://www-unix.mcs.anl.gov/mpi/mpich/" target="_blank">MPICH 
+  site</a>)<br>
+  3. Unpack the source 
+  <blockquote>
+    <p class="ejemplo">tar xzvf mallba.tar.gz</p>
+  </blockquote>
+  4. Change to the toplevel directory <br>
+  <blockquote>
+  	<p class="ejemplo"> cd Mallba</p>
+  </blockquote>
+  5. Configure the Mallba Library by editing the<font face="Courier New,Courier"> 
+  <b><font size="-1">environment</font></b> </font>file.<br>
+  6. Build the Mallba Library by running <br>
+  <blockquote>
+	<p class="ejemplo"> make 
+    all <br>&nbsp;&nbsp;&nbsp;&nbsp; or <br>make 
+    libs</p>
+  </blockquote>
+</blockquote>
+<p>After the installation, the Mallba directory has the following content : </p>
+<div class="ejemplo"> 
+  <pre>         -rw-r--r--&nbsp;&nbsp;&nbsp;&nbsp;1 user&nbsp;&nbsp; users&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   378 sep 24 09:39 Makefile 
+         drwxr-xr-x&nbsp;&nbsp;&nbsp; 4 user&nbsp;&nbsp; users&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    4096 sep 24 09:48 ProblemInstances <br>         -rw-r--r--&nbsp;&nbsp;&nbsp;&nbsp;1 user&nbsp;&nbsp; users&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   345 sep 24 16:29 environment <br>         drwxr-xr-x&nbsp;&nbsp;&nbsp; 2 user&nbsp;&nbsp; users&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   4096 sep 24 16:43 inc <br>         drwxr-xr-x&nbsp;&nbsp;&nbsp; 2 user&nbsp;&nbsp; users&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   4096 sep 24 17:49 lib <br>         drwxr-xr-x&nbsp;&nbsp;&nbsp; 5 user&nbsp;&nbsp; users&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   4096 sep 24 09:41 rep <br>         drwxr-xr-x&nbsp;&nbsp;&nbsp; 2 user&nbsp;&nbsp; users&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   4096 sep 24 17:49 src </pre>
+</div>
+<p align="justify">The <b>/ProblemInstances</b> directory containing the instances for the problems 
+  and the <b>/rep</b>&nbsp; directory containing the implementation of the skeletons 
+  and the example problems.</p>
+<p align="center"><a href="#contenido">[Up]</a></p>
+<h2 align="center">&nbsp;</h2>
+<a href="mallba.html">[Previous]</a> <a href="algorithms.html">[Next]</a> <a href="../index.html">[Home]</a> 
+</body></html>

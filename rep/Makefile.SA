@@ -1,0 +1,12 @@
+all:
+	(cd SA/maxsat; make all)
+	(cd SA/onemax; make all)
+	(cd SA/rnd; make all)
+	(cd SA/dnafa; make all)
+	(cd SA/vrp; make all)
+clean:
+	(cd SA/maxsat; make clean)
+	(cd SA/onemax; make clean)
+	(cd SA/rnd; make clean)
+	(cd SA/dnafa; make clean)
+	(cd SA/vrp; make clean)

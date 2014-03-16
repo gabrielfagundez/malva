@@ -1,0 +1,958 @@
+<html><head><title>Algorithms</title>
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link href="lib.css" rel="stylesheet"></head><body bgcolor="#ffffff" text="#000000">
+<h1><b>Algorithms</b></h1>
+<a href="mallba.html">[Previous]</a> <a href="examples.html">[Next]</a> <a href="../index.html">[Home]</a> <a name="contenido"></a> <br>
+<h2>Contents</h2>
+<ul>
+  <li><a href="#ga">Genetic Algorithm (GA)</a></li>
+  <li><a href="#sa">Simulated Annealing (SA)</a></li>
+  <li><a href="#chc">CHC Method (CHC)</a></li>
+  <li><a href="#es">Evolution Strategy (ES)</a></li>
+  <li><a href="#aco">Ant Colony Optimization (ACO)</a></li>
+  <li><a href="#hy">GA + SA Hybrid Algorithm</a></li>
+  <li><a href="#cls">Cooperative Local Search (CLS)</a></li>
+  <li><a href="#pso">Particle Swarm Optimization (PSO)</a></li>
+</ul>
+<h3>Genetic Algorithm<a name="ga"></a></h3>
+<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;A <b>Genetic Algorithm</b> is an evolutionary 
+  computation technique inspired by the principles of natural selection to search 
+  a solution space. It evolves a population of individuals encoded as chromosomes 
+  by creating new generations of offsprings through an iterative process until 
+  some convergence criteria or conditions are met. The best chromosome generated 
+  is then decoded, providing the corresponding solution. The underlying reproduction 
+  process is mainly aimed at improving the fitness of individuals, a measure of 
+  profit, utility or goodness to be maximized (or minimized) while exploring the 
+  solution space. The algorithm applies stochastic operators such as selection, 
+  crossover, and mutation, on an initially random population in order to compute 
+  a new generation of individuals. The whole process is sketched in the following 
+  figure.</p>
+<blockquote> 
+  <p> <font face="Courier New, Courier, mono"><b><font color="#0000ff">&nbsp;1</font> 
+    t = 0 <br>
+    <font color="#0000ff">&nbsp;2</font> <font color="#ff0000">initialize</font> 
+    P(t) <br>
+    <font color="#0000ff">&nbsp;3</font> <font color="#ff0000">evaluate</font> 
+    structures in P(t) <br>
+    <font color="#0000ff">&nbsp;4</font> while not end do <br>
+    <font color="#0000ff">&nbsp;5</font> &nbsp;&nbsp;&nbsp;t = t + 1 <br>
+    <font color="#0000ff">&nbsp;6</font> <font color="#ff0000">&nbsp;&nbsp;&nbsp;select</font> 
+    C(t) from P(t-1) <br>
+    <font color="#0000ff">&nbsp;7</font> <font color="#ff0000">&nbsp;&nbsp;&nbsp;recombine</font> 
+    structures in C(t) forming C'(t) <br>
+    <font color="#0000ff">&nbsp;8</font> <font color="#ff0000">&nbsp;&nbsp;&nbsp;mutate</font> 
+    structures in C'(t) forming C''(t) <br>
+    <font color="#0000ff"> &nbsp;9</font> <font color="#ff0000">&nbsp;&nbsp;&nbsp;evaluate</font> 
+    structures in C''(t) <br>
+    <font color="#0000ff">10</font> <font color="#ff0000">&nbsp;&nbsp;&nbsp;replace</font> 
+    P(t) from C''(t) and/or P(t-1) </b></font></p>
+</blockquote>
+<p align="justify">It can be seen that the algorithm comprises three major stages: 
+  <i>selection</i>, <i>reproduction</i> and <i>replacement</i>. During the selection 
+  stage, a temporary population is created in which the fittest individuals (those 
+  corresponding to the best solutions contained in the population) have a higher 
+  number of instances than those less fit (natural selection). The reproductive 
+  operators are applied to the individuals in this population yielding a new population. 
+  Finally, individuals of the original population are substituted by the new created 
+  individuals. This replacement usually tries to keep the best individuals deleting 
+  the worst ones. The whole process is repeated until a certain termination criterion 
+  is achieved (usually after a given number of iterations).</p>
+<p align="left">The Genetic Algorithm skeleton (<b>newGA</b>) requires the classes:</p>
+<ul>
+  <li><b>Problem </b></li>
+  <li><b>Solution </b></li>
+  <li><b>Crossover </b></li>
+  <li><b>Mutation </b><br>
+  </li>
+</ul>
+<p>The class <b>Problem</b> corresponds to the definition of a problem instance. 
+  The skeleton filler must provide a complete definition of this class.</p>
+<p align="left">The class <b>Solution</b> corresponds to the definition of a solution 
+  (feasible or not) of a problem instance. The skeleton filler must provide a 
+  complete definition of the class <b>Solution</b>.</p>
+<p align="left">The class <b>Crossover</b> corresponds to the definition of a 
+  crossover operator. The skeleton filler must provide a complete definition of 
+  this class.</p>
+<p align="left">And finally, the class <b>Mutation</b> corresponds to the definition 
+  of a mutation operator. The skeleton filler must provide a complete definition 
+  of this class.</p>
+<p align="left">In adition, the user must configure the following algorithm parameters 
+  (in file <b><font face="Courier New, Courier, mono">newGA.cfg</font></b>):</p>
+<ul>
+  <li>number of independent runs. </li>
+  <li>number of generations. </li>
+  <li>size of population. </li>
+  <li>size of offsprings in each generation. </li>
+  <li>replace mode (if replaces parents for offsprings, or only offsprings may 
+    be new parents). </li>
+  <li>Selection operators parameters (selection of parents and selection of offsprings 
+    parameters). </li>
+  <li>Intra operators parameters (crossover and mutation parameters). </li>
+  <li>Inter operators (operators to apply between sub-populations) parameters: 
+    operator number, operator rate, number of individuals and selection of individual 
+    to send and replace. </li>
+  <li>Parallel Configuracion: interval of generation to refresh global state, 
+    running mode (synchronized or asyncronized) and interval of generations to 
+    check solutions from other populations. </li>
+</ul>
+<p>There are several basic steps to running a problem solve with <strong>newGA</strong> 
+  skeleton:</p>
+<blockquote> 
+  <p>1. Change to the problem directory </p>
+  <blockquote>
+    <p class="ejemplo">cd Mallba/rep/newGA/problem</p>
+  </blockquote>
+      
+  <p>2. Compile skeleton.</p>
+  <blockquote>
+    <p class="ejemplo">make</p>
+  </blockquote>
+    
+  <p>3. Configure algorithm parameters (<b><font face="Courier New, Courier, mono">newGA.cfg</font></b> 
+    file) <br>
+    4. Run problem: <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.1 Sequential Version: 
+  </p><blockquote>
+  <blockquote>
+    <p class="ejemplo">
+	make SEQ <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or <br>
+	MainSeq newGA.cfg_path instance_path res_file_path </p>
+  </blockquote>
+  </blockquote>
+ 
+  <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2 Parallel Version: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.1
+Configure <b><font face="Courier New, Courier, mono">Config.cfg</font></b> 
+    file. <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.2
+Configure <b><font face="Courier New, Courier, mono">pgfileLan</font></b> 
+    (or <b><font face="Courier New, Courier, mono">pgfileWan</font></b>) : machines 
+    where we run the program. <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.3
+Run </p>
+  <blockquote>
+  <blockquote>
+  <blockquote>
+  <blockquote>
+    <p class="ejemplo">
+	make LAN <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or <br>
+	make WAN </p>
+  </blockquote>
+  </blockquote>
+  </blockquote>
+  </blockquote>
+</blockquote>
+<p align="center"><a href="#contenido">[Up]</a></p>
+<h3> Simulated Annealing<a name="sa"></a></h3>
+    
+<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;The <b>Simulated Annealing</b> (SA) 
+  was proposed by <i>S. Kirkpatrik, C. D. Gelatt </i>and<i> M. P. Vecchi</i> on 
+  1983. SA is a stochastic relaxation technique, which has its origin in statistical 
+  mechanics. It is based on an analogy from the annealing process of solids, where 
+  a solid is heated to a high temperature and gradually cooled in order for it 
+  to crystallize in a low energy configuration. SA can be seen as one way of trying 
+  to allow the basic dynamics of hill-climbing to also be able to escape local 
+  optima of poor solution quality. SA guides the original local search method 
+  in the following way. The solution <font face="Courier New, Courier, mono">s'</font> 
+  is accepted as the new current solution if <font face="Courier New, Courier, mono">delta 
+  &lt; 0</font>, where <font face="Courier New, Courier, mono">delta = f(s')-f(s)</font>. 
+  To allow the search to escape a local optimum, moves that increase the objective 
+  function value are accepted with a probability <font face="Courier New, Courier, mono">exp(-delta/T) 
+  </font>if<font face="Courier New, Courier, mono"> delta &gt; 0</font>, where 
+  <font face="Courier New, Courier, mono">T</font> is a parameter called the "temperature". 
+  The value of <font face="Courier New, Courier, mono">T</font> varies from a 
+  relatively large value to a small value close to zero. These values are controlled 
+  by a cooling schedule, which specifies the initial, and temperature values at 
+  each stage of the algorithm. Depending on the temperature upgrade function, 
+  we have one or another version of the algorithm. For example, if <font face="Courier New, Courier, mono">T</font> 
+  is constant it would be obtained the <i>Metropolis heuristic</i>.</p>
+<blockquote> 
+  <p> <font face="Courier New, Courier, mono"><b><font color="#0000ff">&nbsp;1</font> 
+    t = 0 <br>
+    <font color="#0000ff">&nbsp;2</font> <font color="#ff0000">initialize(</font><font face="Courier New, Courier, mono"><b>T</b></font><font color="#ff0000">)</font> 
+    <br>
+    <font face="Courier New, Courier, mono"><b><font color="#0000ff">&nbsp;3</font> 
+    s0 = <font face="Courier New, Courier, mono"><b> <font color="#ff0000">Initial</font></b></font><font color="#ff0000">_Solution()</font><br>
+    <font face="Courier New, Courier, mono"><b><font color="#0000ff">&nbsp;4</font> 
+    v0 = <font face="Courier New, Courier, mono"><b> <font color="#ff0000">Evaluate</font></b></font><font color="#ff0000">(</font><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b>s0</b></font></b></font><font color="#ff0000">)</font><br>
+    </b></font></b></font><font color="#0000ff">&nbsp;5</font> repeat<br>
+    <font face="Courier New, Courier, mono"><b><font color="#0000ff">&nbsp;6&nbsp;&nbsp;&nbsp;</font> 
+    repeat<br>
+    </b></font><font color="#0000ff">&nbsp;7</font> &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;t 
+    = t + 1 <br>
+    <font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b><font color="#0000ff">&nbsp;8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>s1 
+    = <font face="Courier New, Courier, mono"><b> <font color="#ff0000">Generate</font></b></font><font color="#ff0000">(</font><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b>s0,T</b></font></b></font><font color="#ff0000">)</font><br>
+    <font face="Courier New, Courier, mono"><b><font color="#0000ff">&nbsp;9&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>v1 
+    = <font face="Courier New, Courier, mono"><b> <font color="#ff0000">Evaluate</font></b></font><font color="#ff0000">(</font><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b>s0,T</b></font></b></font><font color="#ff0000">)</font><br>
+    <font face="Courier New, Courier, mono"><b><font color="#0000ff">10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>if 
+    <font face="Courier New, Courier, mono"><b> <font color="#ff0000">Accept</font></b></font><font color="#ff0000">(</font><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b>v0,v1,T</b></font></b></font><font color="#ff0000">)</font><br>
+    <font face="Courier New, Courier, mono"><b><font color="#0000ff">11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    &nbsp;&nbsp; </font><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b>s0 
+    = s1</b></font></b></font><br>
+    <font face="Courier New, Courier, mono"><b><font color="#0000ff">12&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+    &nbsp;&nbsp; </font><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b>v0 
+    = v1</b></font></b></font><br>
+    </b></font></b></font></b></font></b></font></b></font><font color="#0000ff">13 
+    &nbsp;&nbsp; </font>until <font color="#ff0000">t </font>mod<font color="#ff0000"> 
+    Markov_Chain_length </font>== 0<br>
+    </b></font></b></font><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b><font color="#0000ff">14&nbsp;&nbsp; 
+    </font>T = <font color="#ff0000">Update(</font><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b>T</b></font></b></font></b></font></b></font></b></font></b></font></b></font></b></font></b></font><font color="#ff0000">)</font><br>
+    </b></font></b></font></b></font></b></font><font color="#0000ff">15 </font>until 
+    <font color="#ff0000">'loop stop criterion'</font> satisfied<br>
+    </b></font><font color="#0000ff"></font></b></font><font color="#0000ff"></font></b></font><font color="#0000ff"></font></b></font></b></font></p>
+</blockquote>
+
+
+<p align="left">The Simulated Annealing skeleton (<b>SA</b>) requires the classes:</p>
+<ul>
+  <li><b>Problem </b></li>
+  <li><b>Solution </b></li>
+  <li><b>DefaultMove</b></li>
+</ul>
+<p>The class <b>Problem</b> corresponds to the definition of a problem instance. 
+  The skeleton filler must provide a complete definition of this class.</p>
+<p align="left">The class <b>Solution</b> corresponds to the definition of a solution 
+  (feasible or not) of a problem instance. The skeleton filler must provide a 
+  complete definition of the class <b>Solution</b>.</p>
+<p align="left">And finally, the class <b>DefaultMove</b> corresponds to the definition 
+  of a movement (generation of a new solution from the current solution). The 
+  skeleton filler must provide a complete definition of this class.</p>
+<p align="left">In adition, the user must configure the following algorithm parameters 
+  (in file <b><font face="Courier New, Courier, mono">SA.cfg</font></b>):</p>
+<ul>
+  <li>number of independent runs. </li>
+  <li>number of evaluations. </li>
+  <li>Markov-Chain Length (temperature is updated in every number of evaluations). 
+    <br>
+  </li>
+  <li>temperature decay factor. </li>
+  <li>Parallel Configuracion: interval of iterations to refresh global state, 
+    running mode (synchronized or asyncronized) and interval of iterations to 
+    cooperate (if 0 no cooperation) <br>
+  </li>
+</ul>
+<p>There are several basic steps to running a problem solve with <strong>SA</strong> 
+  skeleton:</p>
+<blockquote> 
+  <p>1. Change to the problem directory </p>
+  <blockquote>
+    <p class="ejemplo">cd Mallba/rep/SA/problem</p>
+  </blockquote>
+      
+  <p>2. Compile skeleton.</p>
+  <blockquote>
+    <p class="ejemplo">make</p>
+  </blockquote>
+    
+  <p>3. Configure algorithm parameters (<b><font face="Courier New, Courier, mono">SA.cfg</font></b> 
+    file) <br>
+    4. Run problem: <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.1 Sequential Version: 
+  </p><blockquote>
+  <blockquote>
+    <p class="ejemplo">
+	make SEQ <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or <br>
+        MainSeq SA.cfg_path instance_path res_file_path </p>
+  </blockquote>
+  </blockquote>
+ 
+  <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2 Parallel Version: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.1
+Configure <b><font face="Courier New, Courier, mono">Config.cfg</font></b> 
+    file. <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.2
+Configure <b><font face="Courier New, Courier, mono">pgfileLan</font></b> 
+    (or <b><font face="Courier New, Courier, mono">pgfileWan</font></b>) : machines 
+    where we run the program. <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.3
+Run </p>
+  <blockquote>
+  <blockquote>
+  <blockquote>
+  <blockquote>
+    <p class="ejemplo">
+	make LAN <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or <br>
+	make WAN </p>
+  </blockquote>
+  </blockquote>
+  </blockquote>
+  </blockquote>
+</blockquote>
+<p>
+</p>
+<p align="center"><a href="#contenido">[Up]</a> </p>
+<h3> CHC Method<a name="chc"></a></h3>
+<p align="justify"> &nbsp;&nbsp;&nbsp;&nbsp;A <b>CHC</b> is a non-traditional 
+  GA which combines a conservative selection strategy (that always preserves the 
+  best individuals found so far) with a highly disruptive recombination (<i>HUX</i>) 
+  that produces offsprings that are maximally different from their two parents. 
+  The traditional though of preferring a recombination operator with a low disrupting 
+  properties may not hold when such a conservative selection strategy is used. 
+  On the contrary, certain highly disruptive crossover operator provide more effective 
+  search in many problems, which represents the core idea behind the<br>
+  CHC search method. This algorithm introduce a new bias against mating individuals 
+  who are too similar (<i>incest prevention</i>). Mutation is not performed, instead, 
+  a <i>restart</i> process re-introduces diversity whenever convergence is detected.<br>
+</p>
+<blockquote> 
+  <p> <font face="Courier New, Courier, mono"><b><font color="#0000ff">&nbsp;1</font> 
+    t = 0 <br>
+    <font face="Courier New, Courier, mono"><b><font color="#0000ff">&nbsp;2</font> 
+    <font color="#ff0000">initialize</font> P(t) <br>
+    </b></font><font color="#0000ff">&nbsp;3</font> <font color="#ff0000">evaluate</font> 
+    structures in P(t) <br>
+    <font color="#0000ff">&nbsp;4</font> while not end do <br>
+    <font color="#0000ff">&nbsp;5</font> &nbsp;&nbsp;&nbsp;t = t + 1 <br>
+    <font color="#0000ff">&nbsp;6</font> <font color="#ff0000">&nbsp;&nbsp;&nbsp;select:</font> 
+    C(t) = P(t-1) <br>
+    <font color="#0000ff">&nbsp;7</font> <font color="#ff0000">&nbsp;&nbsp;&nbsp;recombine:</font> 
+    C'(t) = 'incest prevention' + HUX(C'(t))<br>
+    <font color="#0000ff">&nbsp;8</font> <font color="#ff0000">&nbsp;&nbsp;&nbsp;evaluate</font> 
+    structures in C'(t) <br>
+    <font face="Courier New, Courier, mono"><b><font color="#0000ff"> </font></b></font><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b><font color="#0000ff">&nbsp;9</font> 
+    <font color="#ff0000">&nbsp;&nbsp;&nbsp;replace</font> P(t) from C''(t) and 
+    P(t-1) </b></font><br>
+    <font color="#0000ff"></font></b></font><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b><font face="Courier New, Courier, mono"><b><font color="#0000ff">10</font> 
+    <font color="#ff0000">&nbsp;&nbsp;&nbsp;</font>if <font color="#ff0000">convergence</font>(P(t))</b></font><br>
+    <font color="#0000ff">11</font> <font color="#ff0000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;diverge</font> 
+    P(t) </b></font><font color="#0000ff"></font></b></font></b></font></b></font></p>
+</blockquote>
+<p align="left">The CHC method skeleton (<b>CHC</b>) requires the classes:</p>
+<ul>
+  <li><b>Problem </b></li>
+  <li><b>Solution</b><br>
+  </li>
+</ul>
+<p>The class <b>Problem</b> corresponds to the definition of a problem instance. 
+  The skeleton filler must provide a complete definition of this class.</p>
+<p align="left">And finally, the class <b>Solution</b> corresponds to the definition 
+  of a solution (feasible or not) of a problem instance. The skeleton filler must 
+  provide a complete definition of the class <b>Solution</b>.</p>
+<p align="left">In adition, the user must configure the following algorithm parameters 
+  (in file <b><font face="Courier New, Courier, mono">CHC.cfg</font></b>):</p>
+<ul>
+  <li>number of independent runs. </li>
+  <li>number of generations. </li>
+  <li>size of population. </li>
+  <li>Selection operator parameters (selection of new parents and the diverge 
+    method that the algorithm uses whenever the convergence is detected). </li>
+  <li>Intra operators parameters (crossover and mutation parameters). </li>
+  <li>Inter operators (operators to apply between sub-populations) parameters: 
+    operator number, operator rate, number of individuals and selection of individual 
+    to send and replace. </li>
+  <li>Parallel Configuracion: interval of generation to refresh global state, 
+    running mode (synchronized or asyncronized) and interval of generations to 
+    check solutions from other populations. </li>
+</ul>
+<p>There are several basic steps to running a problem solve with <strong>CHC</strong> 
+  skeleton:</p>
+<blockquote> 
+  <p>1. Change to the problem directory </p>
+  <blockquote> 
+    <p class="ejemplo">cd Mallba/rep/CHC/problem</p>
+  </blockquote>
+  <p>2. Compile skeleton.</p>
+  <blockquote> 
+    <p class="ejemplo">make</p>
+  </blockquote>
+  <p>3. Configure algorithm parameters (<b><font face="Courier New, Courier, mono">CHC.cfg</font></b> 
+    file) <br>
+    4. Run problem: <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.1 Sequential Version: 
+  </p><blockquote> 
+    <blockquote> 
+      <p class="ejemplo"> make SEQ <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or <br>
+        MainSeq CHC.cfg_path instance_path res_file_path </p>
+    </blockquote>
+  </blockquote>
+  <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2 Parallel Version: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.1
+Configure <b><font face="Courier New, Courier, mono">Config.cfg</font></b> 
+    file. <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.2
+Configure <b><font face="Courier New, Courier, mono">pgfileLan</font></b> 
+    (or <b><font face="Courier New, Courier, mono">pgfileWan</font></b>) : machines 
+    where we run the program. <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.3
+Run </p>
+  <blockquote> 
+    <blockquote> 
+      <blockquote> 
+        <blockquote> 
+          <p class="ejemplo"> make LAN <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or <br>
+            make WAN </p>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+<p align="center"><a href="#contenido">[Up]</a> </p>
+<h3> Evolution Strategy<a name="es"></a></h3>
+<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;An <b>Evolution Strategy</b> is a class 
+  of evolutionary algorithm. This algorithm is suited for continuous values, usually 
+  with an elitist selection and a specific mutation (crossover is used rarely). 
+  In ES, the individual is made of the objective variables plus some other parameters 
+  guiding the search. Thus, a ES facilitates a kind of <i>self-adaption</i> by 
+  evolving the problem variables as well as the strategy parameters at the same 
+  time. Hence, the parameterization of an ES is highly customizable.<br>
+  <br>
+</p>
+<blockquote> 
+  <p> <font face="Courier New, Courier, mono"><b><font color="#0000ff">&nbsp;1</font> 
+    t = 0 <br>
+    <font color="#0000ff">&nbsp;2</font> <font color="#ff0000">initialize</font> 
+    P(t) <br>
+    <font color="#0000ff">&nbsp;3</font> <font color="#ff0000">evaluate</font> 
+    structures in P(t) <br>
+    <font color="#0000ff">&nbsp;4</font> while not end do <br>
+    <font color="#0000ff">&nbsp;5</font> &nbsp;&nbsp;&nbsp;t = t + 1 <br>
+    <font color="#0000ff">&nbsp;6</font> <font color="#ff0000">&nbsp;&nbsp;&nbsp;select</font> 
+    C(t) from P(t-1) <br>
+    <font color="#0000ff">&nbsp;7</font> <font color="#ff0000">&nbsp;&nbsp;&nbsp;recombine</font> 
+    structures in C(t) forming C'(t) <br>
+    <font color="#0000ff">&nbsp;8</font> <font color="#ff0000">&nbsp;&nbsp;&nbsp;mutate</font> 
+    structures in C'(t) forming C''(t) <br>
+    <font color="#0000ff"> &nbsp;9</font> <font color="#ff0000">&nbsp;&nbsp;&nbsp;evaluate</font> 
+    structures in C''(t) <br>
+    <font color="#0000ff">10</font> <font color="#ff0000">&nbsp;&nbsp;&nbsp;replace</font> 
+    P(t) from C''(t) and/or P(t-1) </b></font></p>
+</blockquote>
+<p align="left">The Evolution Strategy skeleton (<b>ES</b>) requires the classes:</p>
+<ul>
+  <li><b>Problem </b></li>
+  <li><b>Solution</b><br>
+  </li>
+</ul>
+<p>The class <b>Problem</b> corresponds to the definition of a problem instance. 
+  The skeleton filler must provide a complete definition of this class.</p>
+<p align="left">And finally, the class <b>Solution</b> corresponds to the definition 
+  of a solution (feasible or not) of a problem instance. The skeleton filler must 
+  provide a complete definition of the class <b>Solution</b>.</p>
+<p align="left">In adition, the user must configure the following algorithm parameters 
+  (in file <b><font face="Courier New, Courier, mono">ES.cfg</font></b>):</p>
+<ul>
+  <li>number of independent runs. </li>
+  <li>number of generations. </li>
+  <li>size of population. </li>
+  <li>size of offsprings in each generation. </li>
+  <li>replace mode (if replaces parents for offsprings, or only offsprings may 
+    be new parents). </li>
+  <li>Selection operators parameters (selection of parents). </li>
+  <li>Intra operators parameters (crossover and mutation parameters). </li>
+  <li>Inter operators (operators to apply between sub-populations) parameters: 
+    operator number, operator rate, number of individuals and selection of individual 
+    to send and replace. </li>
+  <li>Parallel Configuracion: interval of generation to refresh global state, 
+    running mode (synchronized or asyncronized) and interval of generations to 
+    check solutions from other populations. </li>
+</ul>
+<p>There are several basic steps to running a problem solve with <strong>ES</strong> 
+  skeleton:</p>
+<blockquote> 
+  <p>1. Change to the problem directory </p>
+  <blockquote> 
+    <p class="ejemplo">cd Mallba/rep/ES/problem</p>
+  </blockquote>
+  <p>2. Compile skeleton.</p>
+  <blockquote> 
+    <p class="ejemplo">make</p>
+  </blockquote>
+  <p>3. Configure algorithm parameters (<b><font face="Courier New, Courier, mono">ES.cfg</font></b> 
+    file) <br>
+    4. Run problem: <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.1 Sequential Version: 
+  </p><blockquote> 
+    <blockquote> 
+      <p class="ejemplo"> make SEQ <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or <br>
+        MainSeq ES.cfg_path instance_path res_file_path </p>
+    </blockquote>
+  </blockquote>
+  <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2 Parallel Version: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.1
+Configure <b><font face="Courier New, Courier, mono">Config.cfg</font></b> 
+    file. <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.2
+Configure <b><font face="Courier New, Courier, mono">pgfileLan</font></b> 
+    (or <b><font face="Courier New, Courier, mono">pgfileWan</font></b>) : machines 
+    where we run the program. <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.3
+Run </p>
+  <blockquote> 
+    <blockquote> 
+      <blockquote> 
+        <blockquote> 
+          <p class="ejemplo"> make LAN <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or <br>
+            make WAN </p>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+<p align="center"><a href="#contenido">[Up]</a></p>
+<h3> Ant Colony Optimization<a name="aco"></a></h3>
+<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;<b>Ant Colony Optimization </b> <b>(ACO)</b> 
+  studies artificial systems that take inspiration from the behavior of real ant 
+  colonies and which are used to solve discrete optimization problems. Recently 
+  (1999), the Ant Colony Optimization metaheuristic has been defined by <em>Dorigo, 
+  Di Caro</em> and <em>Gambardella</em>. The first ACO system was introduced by 
+  <em>Marco Dorigo</em> in his Ph.D. thesis (1992), and was called Ant System 
+  (AS). It was initially applied to the travelling salesman problem, and to the 
+  quadratic assignment problem. Since 1995 many researchers have been working 
+  on various extended versions of the AS paradigm. </p>
+<p align="justify"> ACO is a population-based algorithm where several artificial 
+  ants search for good solutions. Every ant builds up a solution step by step 
+  thereby going through several decision until a solution is found. Ants that 
+  found a good solution mark their paths through the decision space by putting 
+  some amount of pheromone on the edges of the path. The following ants of the 
+  next generation are attracted by the pheromone so that they will search in the 
+  solution space near good solutions.</p>
+<blockquote> 
+  <p> <font face="Courier New, Courier, mono"><b><font color="#0000ff">&nbsp;1</font> 
+    t = 0 <br>
+    <font color="#0000ff">&nbsp;2</font> <font color="#ff0000">initialize</font> 
+    pheromone trail, PT(t)<br>
+    <font color="#0000ff">&nbsp;3</font> <font color="#ff0000">initialize</font> 
+    heuristic information, H<br>
+    <font color="#0000ff">&nbsp;4</font> while not end do <br>
+    <font color="#0000ff">&nbsp;5</font> &nbsp;&nbsp;&nbsp;t = t + 1 <br>
+    <font color="#0000ff">&nbsp;6</font> <font color="#ff0000">&nbsp;&nbsp;&nbsp;generate</font> 
+    solutions S(t) using PT(t-1) and H<br>
+    <font color="#0000ff">&nbsp;7</font> <font color="#ff0000">&nbsp;&nbsp;&nbsp;update</font> 
+    PT(t) using S(t) and PT(t-1)<br>
+    </b></font></p>
+</blockquote>
+<p align="left">The Ant Colony Optimization skeleton (<b>ACO</b>) requires the 
+  classes:</p>
+<ul>
+  <li><b>Problem </b></li>
+  <li><b>Solution</b></li>
+  <li><b>Heuristic</b><br>
+  </li>
+</ul>
+<p>The class <b>Problem</b> corresponds to the definition of a problem instance. 
+  The skeleton filler must provide a complete definition of this class.</p>
+<p align="left">The class <b>Solution</b> corresponds to the definition of a solution 
+  (feasible or not) of a problem instance. The skeleton filler must provide a 
+  complete definition of the class <b>Solution</b>.</p>
+<p align="left">And finally, the class <b>Heuristic </b>corresponds to the additional 
+  information that the problem requires. This information is taken account of 
+  by the algorithm to decide the next step that an ants perform. The skeleton 
+  filler must provide a complete definition of this class.</p>
+<p align="left">In adition, the user must configure the following algorithm parameters 
+  (in file <b><font face="Courier New, Courier, mono">ACO.cfg</font></b>):</p>
+<ul>
+  <li>number of independent runs. </li>
+  <li>number of generations. </li>
+  <li>size of population (number of ants). </li>
+  <li>Trial information: trail dimension, minimum and maximum trail values, local 
+    update, selection size, initial trial pheromone and q0 (exploration/explotation 
+    tradeoff).</li>
+  <li>alpha (pheromone trail importance), beta (heuristic information importance).</li>
+  <li>Inter operators (operators to apply between sub-populations) parameters: 
+    operator number, operator rate, number of individuals and selection of individual 
+    to send and replace. </li>
+  <li>Parallel Configuracion: interval of generation to refresh global state, 
+    running mode (synchronized or asyncronized) and interval of generations to 
+    check solutions from other populations. </li>
+</ul>
+<p>There are several basic steps to running a problem solve with <strong>ACO</strong> 
+  skeleton:</p>
+<blockquote> 
+  <p>1. Change to the problem directory </p>
+  <blockquote> 
+    <p class="ejemplo">cd Mallba/rep/ACO/problem</p>
+  </blockquote>
+  <p>2. Compile skeleton.</p>
+  <blockquote> 
+    <p class="ejemplo">make</p>
+  </blockquote>
+  <p>3. Configure algorithm parameters (<b><font face="Courier New, Courier, mono">ACO.cfg</font></b> 
+    file) <br>
+    4. Run problem: <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.1 Sequential Version: 
+  </p><blockquote> 
+    <blockquote> 
+      <p class="ejemplo"> make SEQ <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or <br>
+        MainSeq ACO.cfg_path instance_path res_file_path </p>
+    </blockquote>
+  </blockquote>
+  <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2 Parallel Version: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.1
+Configure <b><font face="Courier New, Courier, mono">Config.cfg</font></b> 
+    file. <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.2
+Configure <b><font face="Courier New, Courier, mono">pgfileLan</font></b> 
+    (or <b><font face="Courier New, Courier, mono">pgfileWan</font></b>) : machines 
+    where we run the program. <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.3
+Run </p>
+  <blockquote> 
+    <blockquote> 
+      <blockquote> 
+        <blockquote> 
+          <p class="ejemplo"> make LAN <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or <br>
+            make WAN </p>
+        </blockquote>
+      </blockquote>
+    </blockquote>
+  </blockquote>
+</blockquote>
+<p align="center"><a href="#contenido">[Up]</a></p>
+<h3>GA + SA Hybrid Algorithm<a name="hy"></a></h3>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;In its broadest sense, hybridization refers to the 
+  inclusion of problem-dependent knowledge in a general search algorithm. More 
+  precisely, two major hybridization models are distinguished: <i>strong hybridization</i> 
+  and <i>weak hybridization</i>. </p>
+<ul>
+  <li><i><b>Strong hybrids</b></i>: algorithms in which knowledge has been included 
+    as specific non-conventional problem representations and/or operators<i>.</i></li>
+  <li><i><b>Weak hybrids</b></i>: algorithms resulting from the combination of 
+    lower-lever hybrid algorithms</li>
+</ul>
+<p>The Mallba Library has a hybrid algorithm (<b>newGASA</b>) that is formed by 
+  a Genetic Algorithm and the Simulated Annealing . While the GA allow to move 
+  to good regions of the search space, the SA allow to explore in an exhaustive 
+  way those regions of the search space. </p>
+<p>In each hybrid have been developed several versions of hybridization: </p>
+<ul>
+  <li><i>Version 1</i>: The SA algorithm&nbsp; is used as genetic operator of 
+    the GA.</li>
+</ul>
+<p align="center"><img src="../img/hibri1.gif"></p>
+<ul>
+  <li><i>Version 2</i> and <i>Version 3</i>: The second hybrid schema executes 
+    a GA until the algorithm completely finishes. Then the hybrid selects some 
+    individuals from the final population and executes a SA algorithm over them. 
+    Concretely, it exists a first version (newGASA2) that uses a tournament selection, 
+    and another version (newGASA3) that uses a random choice of individuals.</li>
+</ul>
+<p align="center"><img src="../img/hibri2.gif"></p>
+<p>This skeleton (<b>newGASA</b>) requires the classes: </p>
+<ul>
+  <li> <b>Problem</b></li>
+  <li><b> Solution</b></li>
+  <li><b> Crossover</b></li>
+  <li><b> Mutation</b></li>
+  <li><b> DefaultMove</b></li>
+</ul>
+<p>All these classes were explained in previous sections. </p>
+<p>The user must configure the files: </p>
+<ul>
+  <li><b><font face="Courier New,Courier">newGA.cfg</font></b></li>
+  <li><font face="Courier New,Courier"><b>SA.cfg</b></font></li>
+  <li> and<font face="Courier New,Courier"> <b>newGASA.cfg</b></font></li>
+</ul>
+<p>Two first files had been explained in previous sections and the <font face="Courier New,Courier"><strong>newGASA.cfg</strong></font> 
+  includes the following parameters: </p>
+<ul>
+  <li> Selection method and its parameters (versions 2 and 3)</li>
+  <li> Number of individuals passed to SA (version 2 and 3)</li>
+  <li> <font face="Courier New,Courier"><b>newGA.cfg</b></font> and <font face="Courier New,Courier"><b>SA.cfg</b></font> 
+    paths</li>
+  <li>Problem instance file path</li>
+</ul>
+<p>There are several basic steps to running a problem solve with <strong>newGASA</strong> 
+  skeleton </p>
+<blockquote> 
+  <p>1. Change to the problem directory </p>
+  <blockquote>
+    <p class="ejemplo">cd Mallba/rep/hybrid/newGASA/problem</p>
+  </blockquote>
+      
+  <p>2. Compile skeleton.</p>
+  <blockquote>
+    <p class="ejemplo">make</p>
+  </blockquote>
+    
+  <p>3. Configure algorithm parameters (<b><font face="Courier New, Courier, mono">SA.cfg,GA.cfg 
+    </font></b>and<b><font face="Courier New, Courier, mono"> newGASA.cfg</font></b> 
+    file) <br>
+    4. Run problem: <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.1 Sequential Version (X=1,2 or 
+    3): 
+  </p><blockquote>
+  <blockquote>
+      <p class="ejemplo"> make SEQ_X </p>
+  </blockquote>
+  </blockquote>
+ 
+  <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2 Parallel Version: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.1
+Configure <b><font face="Courier New, Courier, mono">pgfileLanX</font></b> 
+    (or <b><font face="Courier New, Courier, mono">pgfileWanX</font></b>) : machines 
+    where we run the program. <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.2
+Run (X=1,2 or 3)</p>
+  <blockquote>
+  <blockquote>
+  <blockquote>
+  <blockquote>
+          <p class="ejemplo"> make LAN_X <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or <br>
+            make WAN_X </p>
+  </blockquote>
+  </blockquote>
+  </blockquote>
+  </blockquote>
+</blockquote>
+<p> </p>
+<p align="center"><a href="#contenido">[Up]</a></p>
+
+<!-- Cooperative Local Search ---------------------------------------------------------------------------------------------- -->
+<h3>Cooperative Local Search<a name="cls" id="cls"></a></h3>
+<p align="justify"> &nbsp;&nbsp;&nbsp;&nbsp;In <strong>Cooperative Local Search 
+  (CLS)</strong>, there is a population of local solvers and each of them can 
+  be thought of as an explorer. Each explorer is associated with a articular solution. 
+  Several explorers can be made to cooperate by sharing the information that each 
+  of them obtais or learns during the search. </p>
+<blockquote> 
+  <p> <font face="Courier New, Courier, mono"><b><font color="#0000ff">&nbsp;1</font> 
+    <font color="#000000">for each solver Solver(i):</font><font color="#ff0000"> 
+    initialize</font> solution s of Solver(i) <br>
+    <font color="#0000ff">&nbsp;2</font> while not end do <br>
+    <font color="#0000ff">&nbsp;3</font> <font color="#ff0000">&nbsp;&nbsp;&nbsp;<font color="#000000">for 
+    each solver Solver(i):<font color="#ff0000"> execute </font></font></font>G 
+    (granularity) steps.<br>
+    <font color="#0000ff">&nbsp;4</font> <font color="#ff0000">&nbsp;&nbsp;&nbsp;obtain</font> 
+    best solution (bsol) of all Solvers<br>
+    <font color="#0000ff">&nbsp;5</font> <font color="#ff0000">&nbsp;&nbsp;&nbsp;update</font> 
+    solution of each Solver(i) with bsol. <font color="#0000ff"> </font></b></font></p>
+</blockquote>
+<p>This skeleton (<b>CLS</b>) no requires specific classes but the problem must 
+  be implemented in the base local search skeleton. Also, we have to indicate 
+  in <strong><font face="Courier New, Courier, mono">CLS.hh</font></strong> and 
+  <strong><font face="Courier New, Courier, mono">Makefile</font> </strong>the 
+  base local search and the specific problem. For example, if you want to solve 
+  the onemax problem using several cooperative SA algorithm, you must to modify 
+  the file as follows:</p>
+  <blockquote>
+    
+  <p class="ejemplo"><font face="Courier New, Courier, mono"><strong>CLS.hh:</strong></font></p>
+  <p class="ejemplo">&nbsp;</p>
+  <p class="ejemplo"><font face="Courier New, Courier, mono">#include "SA/SA.hh"<br>
+    using skeleton SA;<br>
+    #define BaseSkeleton SA<br>
+    </font></p>
+  <p class="ejemplo">&nbsp;</p>
+  <p class="ejemplo"><font face="Courier New, Courier, mono"><strong>Makefile:</strong></font></p>
+  <p class="ejemplo">&nbsp;</p>
+  <p class="ejemplo"><font face="Courier New, Courier, mono">BASE = SA<br>
+    APP = onemax</font></p>
+</blockquote>
+<p>The user must configure the files: </p>
+<ul>
+  <li><b><font face="Courier New,Courier">CLS.cfg</font></b></li>
+  <li>and<font face="Courier New,Courier"> <b>BaseSkeleton.cfg</b></font></li>
+</ul>
+<p>The last file had been explained in previous sections and the <font face="Courier New,Courier"><strong>CLS.cfg</strong></font> 
+  includes the following parameters: </p>
+<ul>
+  <li> Number of independent runs.</li>
+  <li> Number of evaluations.</li>
+  <li>Number of solvers.</li>
+  <li>Execution granularity.</li>
+  <li> <b><font face="Courier New,Courier">BaseSkeleton</font></b><font face="Courier New,Courier"><b>.cfg</b></font> 
+    path.</li>
+</ul>
+<p>There are several basic steps to running a problem solve with <strong>CLS</strong> 
+  skeleton </p>
+<blockquote> 
+  <p>1. Change to the problem directory </p>
+  <blockquote> 
+    <p class="ejemplo">cd Mallba/rep/CLS/CLS-baseskeleton-problem</p>
+  </blockquote>
+  <p>2. Compile skeleton.</p>
+  <blockquote> 
+    <p class="ejemplo">make</p>
+  </blockquote>
+  <p>3. Configure algorithm parameters (<b><font face="Courier New, Courier, mono">CLS</font><font face="Courier New, Courier, mono">.cfg 
+    </font></b>and<b><font face="Courier New, Courier, mono"> BaseSkeleton.cfg</font></b> 
+    files) <br>
+    4. Run problem: 
+  </p><blockquote> 
+    <blockquote> 
+      <p class="ejemplo"> make SEQ</p>
+      <p class="ejemplo">or</p>
+      <p class="ejemplo">Main.seq CLS.hh problem_instance_path res_file_path</p>
+    </blockquote>
+  </blockquote>
+  <p align="center"><a href="#contenido">[Up]</a></p>
+</blockquote>
+
+<!--  Particle Swarm Optimization ----------------------------------------------------------------------------------------- -->
+<h3>Particle Swarm Optimization <a name="pso" id="pso"></a></h3>
+<p align="justify"> &nbsp;&nbsp;&nbsp;&nbsp;The <strong>Partice Swarm Optimization 
+(CLS)</strong>, Particle swarm optimization (PSO) is a population based stochastic optimization technique developed by Dr. Eberhart 
+and Dr. Kennedy in 1995, inspired by social behavior of bird flocking or fish schooling.
+ The PSO algorithm consists of 
+   a set of potential solutions evolves to approach a convenient solution (or set of solutions) for a problem. 
+   Being an optimization method, the aim is finding the global optimum of a real-valued function (fitness function) 
+   defined in a given space (search space).<br>
+   <br>
+   The social metaphor that led to this algorithm can be summarized as follows: the individuals that are part of a society 
+   hold an opinion that is part of a "belief space" (the search space) shared by every possible individual. 
+   Individuals may modify this "opinion state" based on three factors: 
+</p>
+<p>
+</p><ul>
+   	<li>The knowledge of the environment (its fitness value)</li>
+	<li>The individual's previous history of states (its memory)</li>
+	<li>The previous history of states of the individual's neighborhood</li>
+</ul>
+   <p></p>
+   <p align="justify">
+   An individual's neighborhood may be defined in several ways, configuring somehow the "social network" of the individual. 
+   Several neighborhood topologies exist (full, ring, star, etc.) depending on whether an individual interacts with all, some, 
+   or only one of the rest of the population.<br><br>
+PSO is initialized with a group of random particles (solutions) and
+then searches for optima by updating generations. In every iteration,
+each particle is updated by following two "best" values. The first one
+is the best solution (fitness) it has achieved so far. (The fitness
+value is also stored.) This value is called pbest. Another "best" value
+that is tracked by the particle swarm optimizer is the best value,
+obtained so far by any particle in the population. This best value is a
+global best and called gbest. When a particle takes part of the
+population as its topological neighbors, the best value is a local best
+and is called lbest.<br><br>
+   After finding the two best values, the particle updates its velocity and positions with following equation (a) and (b).
+   </p>
+   <p>
+   <font face="Courier New, Courier, mono"><b><font color="#0000ff">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;v[] = v[] + c1 *
+rand() * (pbest[] - present[]) + c2 * rand() * (gbest[] - present[]) (a)<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;present[] = persent[] + v[] (b)
+	</font></b></font><br><br>
+	v[] is the particle velocity, persent[] is the current particle (solution). pbest[] and gbest[] are defined as stated before. 
+	rand () is a random number between (0,1). c1, c2 are learning factors. usually c1 = c2 = 2. 
+   </p>
+   <blockquote> 
+  <p> <b><font face="Courier New, Courier, mono"><font color="#0000ff">&nbsp;1</font> 
+    <font color="#000000">for each particle (solution):</font><font color="#ff0000"> 
+    initialize</font> particle(i) <br>
+    <font color="#0000ff">&nbsp;2</font> do <br>
+    <font color="#0000ff">&nbsp;3</font> <font color="#ff0000">&nbsp;&nbsp;&nbsp;<font color="#000000">for 
+    each particle(i):<font color="#ff0000"> calculate </font></font></font> fitness value.<br>
+    <font color="#0000ff">&nbsp;4</font>&nbsp;&nbsp;&nbsp; If the fitness value is better than the best fitness value (pBest) in history <br>
+    <font color="#0000ff">&nbsp;5</font> <font color="#ff0000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;update</font> 
+    current value as the new pBest. <font color="#0000ff"> </font><br>
+	<font color="#0000ff">&nbsp;6</font>
+	&nbsp;&nbsp;&nbsp; Choose the particle with the best fitness value in the <font color="#ff0000">neighborhood</font><br>
+	<font color="#0000ff">&nbsp;7</font>
+	&nbsp;&nbsp;&nbsp; For each particle(i)<br>
+	<font color="#0000ff">&nbsp;8</font>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Calculate particle velocity according equation (a)<br>
+	<font color="#0000ff">&nbsp;9</font>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Update particle position according equation (b)<br>
+	<font color="#0000ff">&nbsp;10</font>
+	While maximum iterations or minimum error criteria is not attained</font> <br>
+	</b>
+	</p>	
+</blockquote>
+<p>This skeleton (<strong>PSO</strong>) requires the classes:
+</p><ul>
+	<li><strong>Problem</strong></li>
+	<li><strong>Solution</strong></li>
+</ul> 
+<p></p>
+<p align="justify">
+The class <strong>Problem </strong>corresponds to the definition of a problem instance. The skeleton filler must provide a complete definition of this class.
+<br><br>
+And finally, the class <strong>Solution</strong> corresponds
+to the definition of a particle (feasible or not) of a problem
+instance. The skeleton filler must provide a complete definition of the
+class Solution.
+</p>
+
+<p>In adition, the user must configure the following algorithm parameters (in file <strong>PSO.cfg</strong>):</p>
+<p>General parameters</p>
+<ul>
+  <li> Number of independent runs.</li>
+  <li> Number of generations.</li>
+  <li>Swarm size.</li>
+  <li>Particle size.</li>
+  <li>Neighborhood size.</li>
+</ul>
+<p>Binary pso parameters (for constriction factor)</p>
+<ul>
+  <li>Delta max.</li>
+  <li>Delta min.</li>
+</ul>
+<p>Weight factors</p>
+<ul>
+  <li>Individuality weight.</li>
+  <li>Individuality minimum.</li>
+  <li>Individuality maximum.</li>
+  <li>Sociality weight.</li>
+  <li>Sociality minimum.</li>
+  <li>Sociality maximum.</li>
+  <li>Maximum weight.</li>
+  <li>Minimum weight.</li>
+</ul>
+<p>Migration configuracion</p> 
+<ul>
+	<li>Migration frequency</li>
+</ul>
+<p>Parallel configuracion</p> 
+<ul>
+	<li>Interval of generation to refresh global state</li>
+	<li>Running mode (synchronized or asyncronized)</li>
+	<li>interval of generations to check solutions from other populations</li>
+</ul>
+
+<p>There are several basic steps to running a problem solve with <strong>PSO</strong> 
+skeleton </p>
+<blockquote> 
+  <p>1. Change to the problem directory </p>
+  <blockquote> 
+    <p class="ejemplo">cd Mallba/rep/PSO/PSO-baseskeleton-problem</p>
+  </blockquote>
+  <p>2. Compile skeleton.</p>
+  <blockquote> 
+    <p class="ejemplo">make</p>
+  </blockquote>
+  <p>3. Configure algorithm parameters (<b><font face="Courier New, Courier, mono">PSO.cfg</font></b><strong><font face="Courier New, Courier, mono"> </font></strong>file) <br>
+    4. Run problem: <br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.1 Sequential Version: 
+  </p><blockquote>
+  <blockquote>
+      <p class="ejemplo"> make SEQ</p>
+  </blockquote>
+  </blockquote>
+ 
+  <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2 Parallel Version: <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.1
+Configure <b><font face="Courier New, Courier, mono">pgfileLan</font></b> 
+    (or <b><font face="Courier New, Courier, mono">pgfileWan</font></b>) : machines 
+    where we run the program. <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.2.2
+Run </p>
+  <blockquote>
+  <blockquote>
+  <blockquote>
+  <blockquote>
+          <p class="ejemplo"> make LAN<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;or <br>
+          make WAN</p>
+  </blockquote>
+  </blockquote>
+  </blockquote>
+  </blockquote>
+  <p align="center"><a href="#contenido">[Up]</a></p>
+</blockquote>
+
+
+<h2 align="center">&nbsp;</h2>
+<a href="mallba.html">[Previous]</a> <a href="examples.html">[Next]</a> <a href="../index.html">[Home]</a> 
+</body></html>

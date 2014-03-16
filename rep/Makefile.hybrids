@@ -1,0 +1,9 @@
+all:
+	(cd hybrids/newGA+SA/maxsat; make all)
+	(cd hybrids/newGA+SA/onemax; make all)
+	(cd hybrids/newGA+SA/vrp; make all)
+clean:
+	(cd hybrids/newGA+SA/maxsat; make clean)
+	(cd hybrids/newGA+SA/onemax; make clean)
+	(cd hybrids/newGA+SA/vrp; make clean)
+

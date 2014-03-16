@@ -1,0 +1,52 @@
+A:active {color: #000000; text-decoration: none; background-color: transparent;FONT-WEIGHT: bold;}
+A:visited {color: #3333CC; text-decoration: none; background-color: transparent;FONT-WEIGHT: bold;}
+A:link {color: #3333CC; text-decoration: none; background-color: transparent;FONT-WEIGHT: bold;}
+A:hover {color: #999999; text-decoration: none; background-color: transparent;FONT-WEIGHT: bold;}
+
+a {  text-decoration: none; font-weight: bold}
+h1 {
+	FONT-WEIGHT: bold; FONT-SIZE: 25pt; COLOR: black; FONT-FAMILY: Times New Roman, Verdana, Arial, Comic Sans MS, Helvetica
+}
+h2 {
+	BORDER-RIGHT: thin; PADDING-RIGHT: 0em; BORDER-TOP: thin; PADDING-LEFT: 0.1in; FONT-WEIGHT: bold; FONT-SIZE: 12pt; BACKGROUND: #000099; PADDING-BOTTOM: 0em; MARGIN: 0em; BORDER-LEFT: thin; COLOR: white; PADDING-TOP: 0em; BORDER-BOTTOM: thin; FONT-FAMILY: Verdana, "Comic Sans MS", Arial, Helvetica; TEXT-DECORATION: none
+}
+h3 {
+	FONT-WEIGHT: bold; FONT-SIZE: 12pt; COLOR: #FFFFFF; FONT-FAMILY: Verdana, "Comic Sans MS", Arial, Helvetica; TEXT-ALIGN: justify; TEXT-DECORATION: none; background-color: #0066FF
+}
+p {
+	FONT-SIZE: 10pt; FONT-FAMILY: Verdana,Comic Sans MS
+}
+.texto {
+	FONT-SIZE: 10pt; FONT-FAMILY: Verdana,Comic Sans MS
+}
+.coment {
+	COLOR: blue
+}
+ul {
+	FONT-SIZE: 10pt; FONT-FAMILY: Verdana,Comic Sans MS
+}
+form {
+	FONT-SIZE: 10pt; FONT-FAMILY: Verdana,Comic Sans MS; TEXT-ALIGN: justify
+}
+.ejemplo {
+	BORDER-RIGHT: medium none; BORDER-TOP: medium none; BACKGROUND: silver; MARGIN: 0em 0px; BORDER-LEFT: medium none; COLOR: black; BORDER-BOTTOM: medium none
+}
+.mini {
+	FONT-SIZE: 8pt; FONT-FAMILY: Verdana,Comic Sans MS
+}
+.letraC {
+	FONT-WEIGHT: bold; FONT-SIZE: 12pt; COLOR: blue; FONT-FAMILY: Comic Sans MS, Arial, Helvetica
+}
+.comprobado {
+	FONT-SIZE: 8pt; COLOR: blue
+}
+.volver {
+	FONT-WEIGHT: normal; FONT-SIZE: 8pt; COLOR: blue; FONT-FAMILY: Verdana,Comic Sans MS; TEXT-ALIGN: center; TEXT-DECORATION: none
+}
+body {
+	BACKGROUND: white;
+scrollbar-face-color:#0000FF;
+scrollbar-highlight-color:#FFFFFF;
+scrollbar-arrow-color:#000066;
+scrollbar-track-color:#B1ED2F3;
+}

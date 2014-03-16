@@ -26,7 +26,7 @@ After that, you have to clone this repository, and configure Malva modifying the
 
 Then, execute the following command:
 
-    make libs
+    make all
 
 Your Malva directory should contain the following content after the make:
 
@@ -42,15 +42,12 @@ Your Malva directory should contain the following content after the make:
 
 ## Testing the installation
 
-Go to `MALLBA_DIR/rep_new/CHC` and execute `make`. Then, execute `make SEQ` or `make LAN`. If you have in your console
+Go to `MALLBA_DIR/rep_new/CHC` or `MALLBA_DIR/rep_new/GA` and execute `make SEQ` or `make LAN`. If you have in your console
 the result of the execution, everything looks great!
 
 ## Important notes
 
-`make all` will fail since not all the metaheuristics were upgraded from the old MALLBA code.
-The new fully-functional algorithms are available at MALLBA_DIR/rep_new. While the original (old) algorithms are
-available at MALLBA_DIR/rep.
-The only new fully-functional algorithms are the newGA and the CHC.
+The only new fully-functional algorithms are the GA and the CHC.
 
 ## Architecture
 
@@ -132,7 +129,7 @@ of the original population are substituted by the new created individuals. This 
 best individuals deleting the worst ones. The whole process is repeated until a certain termination criterion is
 achieved (usually after a given number of iterations).
 
-The Genetic Algorithm skeleton (newGA) requires the classes:
+The Genetic Algorithm skeleton (GA) requires the classes:
 
 * Problem
 * Solution
@@ -151,7 +148,7 @@ definition of this class.
 And finally, the class Mutation corresponds to the definition of a mutation operator. The skeleton filler must provide
 a complete definition of this class.
 
-In adition, the user must configure the following algorithm parameters (in file newGA.cfg):
+In adition, the user must configure the following algorithm parameters (in file GA.cfg):
 
 * number of independent runs.
 * number of generations.
@@ -163,17 +160,17 @@ In adition, the user must configure the following algorithm parameters (in file 
 * Inter operators (operators to apply between sub-populations) parameters: operator number, operator rate, number of individuals and selection of individual to send and replace.
 * Parallel Configuracion: interval of generation to refresh global state, running mode (synchronized or asyncronized) and interval of generations to check solutions from other populations.
 
-There are several basic steps to running a problem solve with newGA skeleton:
+There are several basic steps to running a problem solve with GA skeleton:
 
 * Change to the problem directory
 
-    `cd Mallba/rep/newGA/problem`
+    `cd Mallba/rep/GA/problem`
 
 * Compile skeleton.
 
     `make`
 
-* Configure algorithm parameters (newGA.cfg file)
+* Configure algorithm parameters (GA.cfg file)
 
 * Run problem:
 Sequential Version:
@@ -181,7 +178,7 @@ Sequential Version:
 ```
 make SEQ
      or
-MainSeq newGA.cfg_path instance_path res_file_path
+MainSeq GA.cfg_path instance_path res_file_path
 ```
 
 Parallel Version:
@@ -196,74 +193,67 @@ make LAN
 make WAN
 ```
 
-### Simulated Annealing
+### CHC
 
-The Simulated Annealing (SA) was proposed by S. Kirkpatrik, C. D. Gelatt and M. P. Vecchi on 1983. SA is a stochastic
-relaxation technique, which has its origin in statistical mechanics. It is based on an analogy from the annealing
-process of solids, where a solid is heated to a high temperature and gradually cooled in order for it to crystallize
-in a low energy configuration. SA can be seen as one way of trying to allow the basic dynamics of hill-climbing to
-also be able to escape local optima of poor solution quality. SA guides the original local search method in the
-following way. The solution s' is accepted as the new current solution if delta < 0, where delta = f(s')-f(s). To
-allow the search to escape a local optimum, moves that increase the objective function value are accepted with a
-probability exp(-delta/T) if delta > 0, where T is a parameter called the "temperature". The value of T varies from
-a relatively large value to a small value close to zero. These values are controlled by a cooling schedule, which
-specifies the initial, and temperature values at each stage of the algorithm. Depending on the temperature upgrade
-function, we have one or another version of the algorithm. For example, if T is constant it would be obtained the
-Metropolis heuristic.
+A CHC is a non-traditional GA which combines a conservative selection strategy (that always preserves the best
+individuals found so far) with a highly disruptive recombination (HUX) that produces offsprings that are maximally
+different from their two parents. The traditional though of preferring a recombination operator with a low disrupting
+properties may not hold when such a conservative selection strategy is used. On the contrary, certain highly disruptive
+crossover operator provide more effective search in many problems, which represents the core idea behind the
+
+CHC search method. This algorithm introduce a new bias against mating individuals who are too similar (incest
+prevention). Mutation is not performed, instead, a restart process re-introduces diversity whenever convergence is
+detected.
 
 ```
  1 t = 0
- 2 initialize(T)
- 3 s0 = Initial_Solution()
- 4 v0 = Evaluate(s0)
- 5 repeat
- 6    repeat
- 7        t = t + 1
- 8        s1 = Generate(s0,T)
- 9        v1 = Evaluate(s0,T)
-10        if Accept(v0,v1,T)
-11            s0 = s1
-12            v0 = v1
-13    until t mod Markov_Chain_length == 0
-14   T = Update(T)
-15 until 'loop stop criterion' satisfied
+ 2 initialize P(t)
+ 3 evaluate structures in P(t)
+ 4 while not end do
+ 5    t = t + 1
+ 6    select: C(t) = P(t-1)
+ 7    recombine: C'(t) = 'incest prevention' + HUX(C'(t))
+ 8    evaluate structures in C'(t)
+ 9    replace P(t) from C''(t) and P(t-1)
+10    if convergence(P(t))
+11        diverge P(t)
 ```
 
-The Simulated Annealing skeleton (SA) requires the classes:
+The CHC method skeleton (CHC) requires the classes:
 
 * Problem
 * Solution
-* DefaultMove
 
 The class Problem corresponds to the definition of a problem instance. The skeleton filler must provide a complete
 definition of this class.
 
-The class Solution corresponds to the definition of a solution (feasible or not) of a problem instance. The skeleton
-filler must provide a complete definition of the class Solution.
+And finally, the class Solution corresponds to the definition of a solution (feasible or not) of a problem instance.
+The skeleton filler must provide a complete definition of the class Solution.
 
-And finally, the class DefaultMove corresponds to the definition of a movement (generation of a new solution from the
-current solution). The skeleton filler must provide a complete definition of this class.
-
-In adition, the user must configure the following algorithm parameters (in file SA.cfg):
+In adition, the user must configure the following algorithm parameters (in file CHC.cfg):
 
 * number of independent runs.
-* number of evaluations.
-* Markov-Chain Length (temperature is updated in every number of evaluations).
-* temperature decay factor.
-* Parallel Configuracion: interval of iterations to refresh global state, running mode (synchronized or asyncronized)
-and interval of iterations to cooperate (if 0 no cooperation)
+* number of generations.
+* size of population.
+* Selection operator parameters (selection of new parents and the diverge method that the algorithm uses whenever the
+convergence is detected).
+* Intra operators parameters (crossover and mutation parameters).
+* Inter operators (operators to apply between sub-populations) parameters: operator number, operator rate, number of
+individuals and selection of individual to send and replace.
+* Parallel Configuracion: interval of generation to refresh global state, running mode (synchronized or asyncronized)
+and interval of generations to check solutions from other populations.
 
-There are several basic steps to running a problem solve with SA skeleton:
+There are several basic steps to running a problem solve with CHC skeleton:
 
 * Change to the problem directory
 
-    `cd Mallba/rep/SA/problem`
+    `cd Mallba/rep/CHC/problem`
 
-* Compile skeleton.
+* Compile skeleton
 
     `make`
 
-* Configure algorithm parameters (SA.cfg file)
+* Configure algorithm parameters (CHC.cfg file)
 
 * Run problem:
 
@@ -272,7 +262,7 @@ Sequential Version:
 ```
 make SEQ
      or
-MainSeq newGA.cfg_path instance_path res_file_path
+MainSeq GA.cfg_path instance_path res_file_path
 ```
 
 Parallel Version:
@@ -286,5 +276,3 @@ make LAN
     or
 make WAN
 ```
-
-More Information here: http://neo.lcc.uma.es/mallba/easy-mallba/html/algorithms.html

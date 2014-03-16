@@ -4,7 +4,8 @@
 #include <iostream>
 #include <fstream>
 #include <math.h>
-#include <values.h>
+#include <limits.h>
+#include <float.h>
 #include <Rlist.h>
 #include <Rarray.h>
 #include <Messages.h>

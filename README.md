@@ -22,7 +22,7 @@ type:
 
 Disabling Fortran is needed since we are working with C++ instead of Fortran.
 
-After that, you have to clone this repository, and configure Malva modifying the `environment` file.
+After that, you have to clone this repository using `git clone https://github.com/gabrielfagundez/malva`, and configure Malva modifying the `environment` file.
 
 Then, execute the following command:
 

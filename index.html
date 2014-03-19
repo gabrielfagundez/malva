@@ -1,0 +1,116 @@
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <link rel="stylesheet" href="css/foundation.min.css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
+</head>
+<body>
+
+<div class="header-up">
+    <div class="row">
+        <div class="small-12 header-text">
+            <h1>Malva</h1>
+            <div class="header-text">
+                A C++ library for computational intelligence
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="grey">
+    <div class="row">
+        <div class="small-12">
+            <div class="section-title">
+                About
+            </div>
+            <hr>
+            <br>
+        </div>
+        <div class="small-12">
+            <div class="border-left">
+                Malva is an effort to develop, in an integrated way, a library of skeletons for combinatorial optimization
+                (including exact, heuristic and hybrid methods) that can deal with parallelism in a user-friendly and,
+                at the same time, efficient manner.
+                <br>
+                Its three target environments are sequential computers, LANs of workstations and WANs.
+            </div>
+            <br>
+            <div class="no-border-left">
+                The main features of Malva are:
+                <li>Integration of all the skeletons under the same design principles.</li>
+                <li>Facility to switch from sequential to parallel optimization engines. By providing sequential implementations users obtain parallel implementations.</li>
+                <li>Cooperation between engines makes possible to provide more powerful hybrid engines.</li>
+                <li>Ready to use on commodity machines.</li>
+                <li>Flexible and extensible software architecture. New skeletons can easily be added, alternative communication layers can be used, etc.</li>
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="white">
+    <div class="row">
+        <div class="small-12">
+            <div class="section-title">
+                Installing & Testing Malva
+            </div>
+            <hr>
+            <br>
+        </div>
+        <div class="small-12 columns">
+            <div class="small-12 columns">
+                <div class="text-explanation">
+                    1 - Install mpich:
+                </div>
+                <div class="panel radius">
+                    <pre class="big-code">$ sudo apt-get install mpich</pre>
+                </div>
+
+                <div class="text-explanation">
+                    2 - Clone the repository in your local machine:
+                </div>
+                <div class="panel radius">
+                    <pre class="big-code">$ git clone https://github.com/gabrielfagundez/malva</pre>
+                </div>
+
+                <div class="text-explanation">
+                    3 - Modify the <pre class="inline">environment</pre> file:
+                </div>
+                <div class="panel radius">
+                    <pre class="big-code">
+# Malva Configuration.
+MALLBA_DIR=/lib/computational_intelligence/malva
+
+# MPICH library
+MPI_BIN=/usr/local/Cellar/mpich2/3.1/bin
+                    </pre>
+                </div>
+
+                <div class="text-explanation">
+                    4 - Compile the library
+                </div>
+                <div class="panel radius">
+                    <pre class="big-code">$ make all</pre>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="footer-up"></div>
+<div class="footer-down"></div>
+
+
+<script src="js/jquery.js"></script>
+<script src="js/foundation.js"></script>
+<script>
+    $(document).foundation();
+</script>
+</body>

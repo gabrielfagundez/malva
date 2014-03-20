@@ -1,118 +1,187 @@
-<!doctype html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>The Malva Project</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+		<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,300italic" rel="stylesheet" type="text/css" />
+		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
+		<script src="js/jquery.min.js"></script>
+		<script src="js/jquery.poptrox.min.js"></script>
+		<script src="js/skel.min.js"></script>
+		<script src="js/init.js"></script>
+		<noscript>
+			<link rel="stylesheet" href="css/skel-noscript.css" />
+			<link rel="stylesheet" href="css/style.css" />
+		</noscript>
+		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
+	</head>
+	<body>
 
-    <link rel="stylesheet" href="css/foundation.min.css">
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono' rel='stylesheet' type='text/css'>
-</head>
-<body>
-
-<a href="https://github.com/gabrielfagundez/malva"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://github-camo.global.ssl.fastly.net/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
-
-<div class="header-up">
-    <div class="row">
-        <div class="small-12 header-text">
-            <h1>Malva</h1>
-            <div class="header-text">
-                A C++ library for computational intelligence
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="grey">
-    <div class="row">
-        <div class="small-12">
-            <div class="section-title">
-                About
-            </div>
-            <hr>
-            <br>
-        </div>
-        <div class="small-12">
-            <div class="border-left">
-                Malva is an effort to develop, in an integrated way, a library of skeletons for combinatorial optimization
-                (including exact, heuristic and hybrid methods) that can deal with parallelism in a user-friendly and,
-                at the same time, efficient manner.
+		<!-- Header -->
+			<section id="header">
+				<header>
+                    <img src="images/malva/malva_icon.png" width="300px" height="300px">
+					<h1>THE MALVA PROJECT</h1>
+					<p>A framework for computational intelligence</p>
+				</header>
+				<footer>
+					<a href="#banner" class="button style2 scrolly scrolly-centered">Go on...</a>
+				</footer>
+			</section>
+		
+		<!-- Banner -->
+			<section id="banner">
+				<header>
+					<h2>About Malva</h2>
+				</header>
+				<p>
+                    Malva is an unofficial fork of the Malva project. <br/>
+                    It is an effort to develop, in an integrated way, a library of skeletons for combinatorial optimization <br/>
+                    (including exact, heuristic and hybrid methods) that can deal with parallelism in a user-friendly and, <br/>
+                    at the same time, efficient manner.
+                    <br/>
+                    Its three target environments are sequential computers, LANs of workstations and WANs.
+				</p>
                 <br>
-                Its three target environments are sequential computers, LANs of workstations and WANs.
-            </div>
-            <br>
-            <div class="no-border-left">
-                The main features of Malva are:
+
+                <h3>The main features of Malva are:</h3>
+
                 <li>Integration of all the skeletons under the same design principles.</li>
                 <li>Facility to switch from sequential to parallel optimization engines. By providing sequential implementations users obtain parallel implementations.</li>
                 <li>Cooperation between engines makes possible to provide more powerful hybrid engines.</li>
                 <li>Ready to use on commodity machines.</li>
                 <li>Flexible and extensible software architecture. New skeletons can easily be added, alternative communication layers can be used, etc.</li>
-                <hr>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="white">
-    <div class="row">
-        <div class="small-12">
-            <div class="section-title">
-                Installing & Testing Malva
-            </div>
-            <hr>
-            <br>
-        </div>
-        <div class="small-12 columns">
-            <div class="small-12 columns">
-                <div class="text-explanation">
-                    1 - Install mpich:
-                </div>
-                <div class="panel radius">
-                    <pre class="big-code">$ sudo apt-get install mpich</pre>
+			</section>
+		
+		<!-- Generic -->
+
+			<article class="container box style3">
+				<header>
+					<h2>How to install Malva</h2>
+				</header>
+                <p>1 - Install mpich:</p>
+                <div class="with-border">
+                    $ sudo apt-get install MPICH
                 </div>
 
-                <div class="text-explanation">
-                    2 - Clone the repository in your local machine:
-                </div>
-                <div class="panel radius">
-                    <pre class="big-code">$ git clone https://github.com/gabrielfagundez/malva</pre>
+                <p>2 - Clone the repository in your local machine:</p>
+                <div class="with-border">
+                    $ git clone https://github.com/gabrielfagundez/malva
                 </div>
 
-                <div class="text-explanation">
-                    3 - Modify the <pre class="inline">environment</pre> file:
-                </div>
-                <div class="panel radius">
-                    <pre class="big-code">
-# Malva Configuration.
-MALLBA_DIR=/lib/computational_intelligence/malva
-
-# MPICH library
-MPI_BIN=/usr/local/Cellar/mpich2/3.1/bin
-                    </pre>
+                <p>3 - Modify the environment file:</p>
+                <div class="with-border">
+                    # Malva Configuration.<br/>
+                    Malva_DIR=/lib/computational_intelligence/malva<br/>
+                    <br/>
+                    # MPICH library<br/>
+                    MPI_BIN=/lib/mpich2/3.1/bin<br/>
                 </div>
 
-                <div class="text-explanation">
-                    4 - Compile the library
-                </div>
-                <div class="panel radius">
-                    <pre class="big-code">$ make all</pre>
+                <p>4 - Compile the library</p>
+                <div class="with-border">
+                    $ make all
                 </div>
 
-            </div>
-        </div>
-    </div>
-</div>
+                <br/>
+                <hr />
+                <br/>
 
-<div class="footer-up"></div>
-<div class="footer-down"></div>
+				<section>
+                    <header>
+                        <h2>Full explanation</h2>
+                    </header>
+
+                    <div class="full-explanation">
+                        Malva skeletons are based on the separation of two concepts: the concrete problem to be solved and
+                        the general resolution method to be used. They can be seen as generic templates that just need
+                        to be instantiated with the features of a problem in order to solve it. All features related to
+                        the selected generic resolution method and its interaction with the concrete problem are
+                        implemented by the skeleton. While the particular features related to the problem must be given
+                        by the user, the knowledge to parallelize the execution of the resolution method is implemented
+                        in the skeleton, so that users do not need to deal with parallelism issues.
+
+                        <br />
+                        <br />
+                        The design of the Malva library focuses on easy to use skeletons and general and efficient
+                        implementations. To achieve both objectives, the C++ programming language was selected due to
+                        its high level, modularity, flexibility and efficiency features. We have reduced to a minimum
+                        the use of inheritance and virtual methods in order to provide better efficiency and ease of use.
+                        To instantiate most problems, a basic knowledge of C++ is enough, and only sequential code
+                        without side effects is needed.
+
+                        <br />
+                        <br />
+                        Skeletons are implemented by a set of required and provided C++ classes that represent an
+                        abstraction of the entities participating in the resolution method. The provided classes
+                        implement internal aspects of the skeleton in a problem-independent way. The required classes
+                        specify information and behavior related to the problem. This conceptual separation allows us
+                        to define required classes with a fixed interface but without any implementation, so that provided
+                        classes can use required classes in a generic way.
+
+                        <br />
+                        <br />
+                        More specifically, each skeleton includes the Problem and Solution required classes, that
+                        encapsulate the problem-dependent entities needed by the resolution method. The Problem class
+                        abstracts the features of the problem that are relevant to the selected optimization method.
+                        The Solution class abstracts the features of the feasible solutions that are relevant to the
+                        selected resolution method. Depending on the skeleton, other classes may be required. On the
+                        other hand, each skeleton offers two provided classes: Solver and SetUpParams. The former abstracts
+                        the selected resolution method. The later contains the setup parameters needed to perform the
+                        execution (e.g. number of iterations, number of independent runs, parameters guiding the search,
+                        etc.). The Solver class provides methods to run the resolution scheme and methods to consult
+                        its progress or change its state. The only information the solver needs is an instance of the
+                        problem to solve and the setup parameters. In order to enable an skeleton to have different
+                        solver engines, the Solver class defines a unique interface and provides several subclasses
+                        that provide different sequential and parallel implementations (Solver_Seq, Solver_Lan and Solver_Wan).
+
+                        <br />
+
+                        IMAGEN DE ARQ
+                    </div>
+				</section>
+
+                <hr />
+                <br/>
 
 
-<script src="js/jquery.js"></script>
-<script src="js/foundation.js"></script>
-<script>
-    $(document).foundation();
-</script>
-</body>
+                <section>
+					<header>
+						<h3>Implementation</h3>
+					</header>
+                    <div class="full-explanation">
+                        <strong>The implementation of each skeleton is contained in three files:</strong>
+                        <li>#{skeleton}.hh: The file containing the definition of all classes (provides and requires).</li>
+                        <li>#{skeleton}.pro.cc: The file containing the source code of the classes needed for the  internal
+                            implementation of the method.</li>
+                        <li>#{skeleton}.req.cc: The source file where all the required classes will be implemented.</li>
+                        In additional, the user must configure the method parameters in the file #{skeleton}.cfg.</li>
+                    </div>
+
+				</section>
+
+                <hr />
+                <br/>
+			</article>
+
+		
+		<section id="footer">
+			<ul class="icons">
+				<li><a href="http://twitter.com/TheMalvaProject" class="fa fa-twitter solo"><span>Twitter</span></a></li>
+				<!--<li><a href="#" class="fa fa-facebook solo"><span>Facebook</span></a></li>-->
+				<!--<li><a href="#" class="fa fa-google-plus solo"><span>Google+</span></a></li>-->
+				<!--<li><a href="#" class="fa fa-pinterest solo"><span>Pinterest</span></a></li>-->
+				<!--<li><a href="#" class="fa fa-dribbble solo"><span>Dribbble</span></a></li>-->
+				<!--<li><a href="#" class="fa fa-linkedin solo"><span>LinkedIn</span></a></li>-->
+			</ul>
+			<div class="copyright">
+				<ul class="menu">
+					<li>&copy; The Malva Project. All rights reserved.</li>
+				</ul>
+			</div>
+		</section>
+	</body>
+</html>
